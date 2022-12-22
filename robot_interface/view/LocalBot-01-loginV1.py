@@ -1,3 +1,5 @@
+from kivy.core.window import Window
+from kivymd.uix.button import MDTextButton
 from kivymd.uix.label import MDLabel
 from kivymd.uix.screenmanager import MDScreenManager
 
@@ -5,11 +7,11 @@ from rocket_kitchens_local_bot.robot_interface.model.credentials import passport
 
 def credential():
     dict_credential = {
-        "ahmd@rocketkitchens.com": "ahmd123",
-        "hassan@rocketkitchens.com": "hassan123",
-        "accounts@rocketkitchens.com": "accounts123",
-        "marwan@rocketkitchens.com": "marwan123",
-        "gustavo@rocketkitchens.com": "gustavo123"
+        "ahmd": "ahmd123",
+        "hassan": "hassan123",
+        "accounts": "accounts123",
+        "marwan": "marwan123",
+        "gustavo": "gustavo123"
     }
     return dict_credential
 
@@ -29,15 +31,20 @@ from kivymd.uix.screen import MDScreen
 # from kivymd.tools.hotreload.app import MDApp
 from kivymd.app import MDApp
 from kivymd.uix.card import MDCard
+Window.size = (400, 300)
 
 
+import watchdog.events
+import watchdog.observers
+import time
 
 class LoginScreen(MDScreen):
+
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
         layout = BoxLayout(orientation='vertical')
-
         self.username_input = TextInput(hint_text='Username')
         layout.add_widget(self.username_input)
 
@@ -68,15 +75,31 @@ class LoginScreen(MDScreen):
 
 
 class MainScreen(MDScreen):
+
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
         self.add_widget(MDLabel(text='Welcome to the main screen!'))
 
+        control_layout = BoxLayout(orientation='horizontal')
+        start_button = Button(text='Start', size_hint=(0.1, .2))
+        stop_button = Button(text='Stop', size_hint=(0.1, .2))
+        status_button = Button(text='status', size_hint=(0.1, .2))
+        logout_button = Button(text='logout', size_hint=(0.1, .2))
+        control_layout.add_widget(start_button)
+        control_layout.add_widget(stop_button)
+        control_layout.add_widget(status_button)
+        control_layout.add_widget(logout_button)
+
+        self.add_widget(control_layout)
+
 
 class ScreenManagementApp(MDApp):
     def build(self):
         self.screen_manager = MDScreenManager()
+        self.theme_cls.theme_style = "Dark"
+        self.theme_cls.primary_palette = "Orange"
 
         self.login_screen = LoginScreen(name='login_screen')
         self.main_screen = MainScreen(name='main_page')
@@ -85,6 +108,20 @@ class ScreenManagementApp(MDApp):
         self.screen_manager.add_widget(self.main_screen)
 
         return self.screen_manager
+
+class Handler(watchdog.events.PatternMatchingEventHandler):
+    def __init__(self):
+        # Set the patterns for PatternMatchingEventHandler
+        watchdog.events.PatternMatchingEventHandler.__init__(self, patterns=['*.csv'],
+                                                             ignore_directories=True, case_sensitive=False)
+
+    def on_created(self, event):
+        print("Watchdog received created event - % s." % event.src_path)
+        # Event is created, you can process it now
+
+    def on_modified(self, event):
+        print("Watchdog received modified event - % s." % event.src_path)
+        # Event is modified, you can process it now
 
 
 if __name__ == '__main__':
