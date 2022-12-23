@@ -1,9 +1,15 @@
+import subprocess
+
 from kivy.core.window import Window
 from kivymd.uix.button import MDTextButton
 from kivymd.uix.label import MDLabel
 from kivymd.uix.screenmanager import MDScreenManager
 
 from rocket_kitchens_local_bot.robot_interface.model.credentials import passport as ps
+
+from rocket_kitchens_local_bot.robot_interface.controller import observer_controller as obs
+
+
 
 def credential():
     dict_credential = {
@@ -58,6 +64,9 @@ class LoginScreen(MDScreen):
 
         #================================
 
+    def start_controller(self):
+        obs.start_controller()
+
     def login(self, instance):
         username = self.username_input.text
         password = self.password_input.text
@@ -79,11 +88,16 @@ class MainScreen(MDScreen):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        src_path = r"D:\Arquivos HD\Projetos HD\SD Labs\JOBS\Ahmd\rocket\rocket_kitchens\Dashboard\View\Pages\output"
 
         self.add_widget(MDLabel(text='Welcome to the main screen!'))
-
+        self.obs = obs.start_controller
         control_layout = BoxLayout(orientation='horizontal')
-        start_button = Button(text='Start', size_hint=(0.1, .2))
+        start_button = Button(text='Start',
+                              size_hint=(0.1, .2),
+                              on_press=self.obs)
+
+
         stop_button = Button(text='Stop', size_hint=(0.1, .2))
         status_button = Button(text='status', size_hint=(0.1, .2))
         logout_button = Button(text='logout', size_hint=(0.1, .2))
@@ -94,6 +108,9 @@ class MainScreen(MDScreen):
 
         self.add_widget(control_layout)
 
+    def on_button_press(self, instance):
+        print("Starting Observer")
+        subprocess.Popen(['python', '../model/observer_model.py'])
 
 class ScreenManagementApp(MDApp):
     def build(self):
