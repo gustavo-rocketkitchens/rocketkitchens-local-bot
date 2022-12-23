@@ -91,7 +91,10 @@ class MainScreen(MDScreen):
         src_path = r"D:\Arquivos HD\Projetos HD\SD Labs\JOBS\Ahmd\rocket\rocket_kitchens\Dashboard\View\Pages\output"
 
         self.add_widget(MDLabel(text='Welcome to the main screen!'))
+
+        # Call the Controller
         self.obs = obs.start_controller
+
         control_layout = BoxLayout(orientation='horizontal')
         start_button = Button(text='Start',
                               size_hint=(0.1, .2),
