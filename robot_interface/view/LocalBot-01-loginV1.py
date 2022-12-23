@@ -93,15 +93,20 @@ class MainScreen(MDScreen):
         self.add_widget(MDLabel(text='Welcome to the main screen!'))
 
         # Call the Controller
-        self.obs = obs.start_controller
-
+        self.obs_start = obs.start_controller
+        self.obs_stop = obs.stop_controller
         control_layout = BoxLayout(orientation='horizontal')
         start_button = Button(text='Start',
                               size_hint=(0.1, .2),
-                              on_press=self.obs)
+                              on_press=self.obs_start)
 
 
-        stop_button = Button(text='Stop', size_hint=(0.1, .2))
+        stop_button = Button(text='Stop',
+                             size_hint=(0.1, .2),
+                             on_press=obs.stop_controller
+                             )
+
+
         status_button = Button(text='status', size_hint=(0.1, .2))
         logout_button = Button(text='logout', size_hint=(0.1, .2))
         control_layout.add_widget(start_button)

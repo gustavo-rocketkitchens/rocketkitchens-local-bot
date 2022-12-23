@@ -33,6 +33,11 @@ def start_observer(src_path):
     observer.join()
 
 
+def stop_observer():
+    observer = watchdog.observers.Observer()
+
+    observer.stop()
+
 if __name__ == "__main__":
     src_path = r"D:\Arquivos HD\Projetos HD\SD Labs\JOBS\Ahmd\rocket\rocket_kitchens\Dashboard\View\Pages\output"
     start_observer(src_path)
