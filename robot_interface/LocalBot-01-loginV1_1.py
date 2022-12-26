@@ -65,7 +65,8 @@ class LoginScreen(MDScreen):
         #================================
 
     def start_controller(self):
-        obs.start_controller()
+        # obs.start_controller()
+        ...
 
     def login(self, instance):
         global username
@@ -97,6 +98,7 @@ class MainScreen(MDScreen):
         # Call the Controller
         self.obs_start = obs.start_controller
         self.obs_stop = obs.stop_controller
+        self.obs_bot  = obs.start_bot_controller
         control_layout = BoxLayout(orientation='horizontal')
         start_button = Button(text='Start',
                               size_hint=(0.1, .2),
@@ -158,7 +160,9 @@ class Handler(watchdog.events.PatternMatchingEventHandler):
     def on_created(self, event):
         print("Watchdog received created event - % s." % event.src_path)
         # Event is created, you can process it now
-
+        # start = MainScreen()
+        # start.obs_bot()
+        ...
     def on_modified(self, event):
         print("Watchdog received modified event - % s." % event.src_path)
         # Event is modified, you can process it now

@@ -2,8 +2,6 @@ import os
 
 import pandas as pd
 
-import pandas as pd
-
 class Parameters:
     def __init__(self, filepath):
         self.filepath = filepath
@@ -31,7 +29,7 @@ class Parameters:
 
 if __name__ == "__main__":
     src_path = r"D:\Arquivos HD\Projetos HD\SD Labs\JOBS\Ahmd\rocket\rocket_kitchens\Dashboard\View\Pages\output"
-    filename = 'File (5).csv'
+    filename = 'File.csv'
     filepath = os.path.join(src_path, filename)
     # Create an instance of the Parameters class
     params = Parameters(filepath)

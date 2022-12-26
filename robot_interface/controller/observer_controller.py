@@ -21,11 +21,12 @@ def start_controller(instance):
     observer_process = subprocess.Popen(['python', 'model/observer_model.py'])
 
     # Run the Python script
-    print(observer_process)
+    print('observer_process = ', observer_process)
 
     # Navigate back to the original working directory
     # os.chdir(cwd)
     # print(cwd)
+
 
 def stop_controller(instance):
     global observer_process
@@ -50,6 +51,13 @@ def stop_controller(instance):
     os.chdir(cwd)
 
 
+def start_bot_controller(instance):
+    src_path = r''
+    bot_process = subprocess.Popen(['python', 'model/robot-launcher.py'])
+    print(bot_process)
+
+
+
 import kivy
 import subprocess
 
@@ -65,6 +73,9 @@ class MyApp(App):
     def on_button_press(self, instance):
         print("Starting Observer")
         subprocess.Popen(['python', '../model/observer_model.py'])
+
+
+
 
 if __name__ == "__main__":
     MyApp().run()

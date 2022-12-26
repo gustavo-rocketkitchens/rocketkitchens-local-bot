@@ -1,3 +1,5 @@
+import subprocess
+
 import watchdog.events
 import watchdog.observers
 import time
@@ -19,7 +21,9 @@ class Handler(watchdog.events.PatternMatchingEventHandler):
     def on_modified(self, event):
         print("Watchdog received modified event - % s." % event.src_path)
         # Event is modified, you can process it now
-        ...
+
+        subprocess.Popen(['python', '../robot_interface/model/robot-launcher.py'])
+
 
 def start_observer(src_path):
     event_handler = Handler()
