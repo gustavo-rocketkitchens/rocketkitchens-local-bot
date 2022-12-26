@@ -68,6 +68,8 @@ class LoginScreen(MDScreen):
         obs.start_controller()
 
     def login(self, instance):
+        global username
+        global password
         username = self.username_input.text
         password = self.password_input.text
 
@@ -107,14 +109,27 @@ class MainScreen(MDScreen):
                              )
 
 
+
+        # self.logout = logout()
         status_button = Button(text='status', size_hint=(0.1, .2))
-        logout_button = Button(text='logout', size_hint=(0.1, .2))
+        logout_button = Button(text='Logout', size_hint=(0.1, .2), on_press=self.logout)
         control_layout.add_widget(start_button)
         control_layout.add_widget(stop_button)
         control_layout.add_widget(status_button)
         control_layout.add_widget(logout_button)
 
         self.add_widget(control_layout)
+
+    def logout(self, instance):
+        print(username)
+        print(password)
+        LoginScreen().login(instance)
+        # LoginScreen.login.username = ''
+        # LoginScreen.login.password = ''
+        # self.username_input.text = ''
+        # self.password_input.text = ''
+        self.manager.current = 'login_screen'
+        # LoginScreen().login(instance)
 
     def on_button_press(self, instance):
         print("Starting Observer")

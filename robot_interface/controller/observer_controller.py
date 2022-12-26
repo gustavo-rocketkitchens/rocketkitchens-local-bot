@@ -12,9 +12,10 @@ def start_controller(instance):
 
     # Get the current working directory
     cwd = os.getcwd()
-
-    # Navigate to the parent directory
-    os.chdir('..')
+    print(cwd)
+    # # Navigate to the parent directory
+    # os.chdir('..')
+    # print(cwd)
 
     # launcher_oberserver = observer_model.start_observer(src_path)
     observer_process = subprocess.Popen(['python', 'model/observer_model.py'])
@@ -23,7 +24,8 @@ def start_controller(instance):
     print(observer_process)
 
     # Navigate back to the original working directory
-    os.chdir(cwd)
+    # os.chdir(cwd)
+    # print(cwd)
 
 def stop_controller(instance):
     global observer_process
