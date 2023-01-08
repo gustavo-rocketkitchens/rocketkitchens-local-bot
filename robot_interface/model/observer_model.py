@@ -8,6 +8,7 @@ import time
 
 class Handler(watchdog.events.PatternMatchingEventHandler):
 
+
     def __init__(self):
         # Set the patterns for PatternMatchingEventHandler
         watchdog.events.PatternMatchingEventHandler.__init__(self, patterns=['*.csv'], ignore_directories=True,
@@ -21,8 +22,13 @@ class Handler(watchdog.events.PatternMatchingEventHandler):
     def on_modified(self, event):
         print("Watchdog received modified event - % s." % event.src_path)
         # Event is modified, you can process it now
+        dist_robot_interface = "dependencies/robot-launcher.py"
 
-        subprocess.Popen(['python', '../robot_interface/model/robot-launcher.py'])
+        # RUN WITH SCRIPT
+        # subprocess.Popen(['python', '../robot_interface/model/robot-launcher.py'])
+
+        # RUN WITH PYSINTALLER
+        subprocess.Popen(['python', dist_robot_interface])
 
 
 def start_observer(src_path):

@@ -3,6 +3,8 @@ import os
 import pandas as pd
 
 class Parameters:
+
+
     def __init__(self, filepath):
         self.filepath = filepath
         # Read the CSV file using pandas, specifying that the first line should be skipped

@@ -21,7 +21,7 @@ def start_controller(instance):
     # RUN WITH SCRIPT
     # observer_process = subprocess.Popen(['python', 'model/observer_model.py'])
 
-    # RUN WITH PYSINTALLER
+    # RUN WITH PYINSTALLER
     observer_process = subprocess.Popen(['python', dist_robot_interface])
 
     # Run the Python script
