@@ -24,15 +24,15 @@ from kivymd.uix.screen import MDScreen
 # from kivymd.tools.hotreload.app import MDApp
 from kivymd.app import MDApp
 from kivymd.uix.card import MDCard
-Window.size = (400, 300)
 
+Window.size = (400, 300)
 
 import watchdog.events
 import watchdog.observers
 import time
 
-class LoginScreen(MDScreen):
 
+class LoginScreen(MDScreen):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -52,23 +52,12 @@ class LoginScreen(MDScreen):
         # Add the card to the layout
         layout.add_widget(card)
 
-
-
-
-        #==========================================================================
-        # self.username_input = TextInput(hint_text='Username')
-        # layout.add_widget(self.username_input)
-        #
-        # self.password_input = TextInput(hint_text='Password', password=True)
-        # layout.add_widget(self.password_input)
-
         login_button = Button(text='Login', on_press=self.login)
         layout.add_widget(login_button)
 
         self.add_widget(layout)
 
-        #================================
-
+        # ================================
 
     def login(self, instance):
         global username
@@ -90,7 +79,6 @@ class LoginScreen(MDScreen):
 
 class MainScreen(MDScreen):
 
-
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
@@ -103,7 +91,7 @@ class MainScreen(MDScreen):
         self.obs_stop = obs.stop_controller
 
         # Launch the Robots
-        self.obs_bot  = obs.start_bot_controller
+        self.obs_bot = obs.start_bot_controller
 
         control_layout = BoxLayout(orientation='horizontal')
 
@@ -117,7 +105,6 @@ class MainScreen(MDScreen):
                              size_hint=(0.1, .2),
                              on_press=obs.stop_controller
                              )
-
 
         # Call the Logout
         # self.logout = logout()
@@ -144,11 +131,11 @@ class MainScreen(MDScreen):
         # LoginScreen().login(instance)
 
 
-class ScreenManagementApp(MDApp):
+class LocalBot(MDApp):
     def build(self):
         self.screen_manager = MDScreenManager()
         self.theme_cls.theme_style = "Dark"
-        self.theme_cls.primary_palette = "Orange"
+        self.theme_cls.primary_palette = "Purple"
 
         self.login_screen = LoginScreen(name='login_screen')
         self.main_screen = MainScreen(name='main_page')
@@ -160,4 +147,4 @@ class ScreenManagementApp(MDApp):
 
 
 if __name__ == '__main__':
-    ScreenManagementApp().run()
+    LocalBot().run()
