@@ -61,9 +61,30 @@ class LoginScreen(MDScreen):
             self.ids.password_input.hint_text = 'Invalid username or password'
 
 class MainScreen(MDScreen):
+
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
+        # Call the Controller
+        self.obs_start = obs.start_controller
+
+        # Call for stop the Controller
+        self.obs_stop = obs.stop_controller
+
+        # Launch the Robots
+        self.obs_bot = obs.start_bot_controller
+
+    def logout(self, instance):
+        print(username)
+        print(password)
+        LoginScreen().login(instance)
+        # LoginScreen.login.username = ''
+        # LoginScreen.login.password = ''
+        # self.username_input.text = ''
+        # self.password_input.text = ''
+        self.manager.current = 'login'
+        # LoginScreen().login(instance)
 
 
 class RocketKitchens(MDApp):

@@ -120,23 +120,28 @@
         orientation: "horizontal"
         size_hint: (1, 0.1)
         pos_hint: {"x": 0, "bottom": 1}
+
+
         MDFlatButton:
+            id: start
             text: "Start"
             theme_text_color: "Custom"
             text_color: (1, 1, 1, 1)
             md_bg_color: (0.5, 0, 1, 1)
             width: self.parent.width/4
-
+            on_press: root.obs_start(start)
 
         MDFlatButton:
+            id: stop
             text: "Stop"
             theme_text_color: "Custom"
             text_color: (1, 1, 1, 1)
             md_bg_color: (0.5, 0, 1, 1)
             width: self.parent.width/4
-
+            on_press: root.obs_stop(stop)
 
         MDFlatButton:
+            id: status
             text: "Status"
             theme_text_color: "Custom"
             text_color: (1, 1, 1, 1)
@@ -144,8 +149,10 @@
             width: self.parent.width/4
 
         MDFlatButton:
+            id: out
             text: "Logout"
             theme_text_color: "Custom"
             ttext_color: (1, 1, 1, 1)
             md_bg_color: (0.5, 0, 1, 1)
             width: self.parent.width/4
+            on_press: root.logout(out)
