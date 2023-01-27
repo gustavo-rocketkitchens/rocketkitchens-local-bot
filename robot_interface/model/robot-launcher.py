@@ -3,9 +3,11 @@ import os
 # #  To run With Script
 # from rocket_kitchens.Admin import admin as ad
 # from rocket_kitchens_local_bot.robot_interface.model.parameters import Parameters
+# from rocket_kitchens_local_bot.robot_interface.model.robot_models.Zoey import zoey
 
 #  To run in Pyinstaller
 from parameters import Parameters
+from robot_models.Zoey import zoey
 
 from robot_models import admin as ad
 
@@ -24,13 +26,31 @@ class RobotLauncher:
         self.extract_orders = 'Extract Orders'
         self.extract_reports = ''
         self.exit_talabat = ''
+        self.zoey = 'Zoey'
+        self.leo = 'Leo'
+        self.sal = 'Sal'
 
+        #===============================================================
+        # Launch the following Robots:
+        #===============================================================
 
         # self.bot_extract_orders =  bot.tabalat_extract_orders()
-        self.bot_extract_orders =  bot.enter_talabat()
+        self.bot_extract_orders = bot.enter_talabat
+
+        # Zoey
+        start = zoey.Start()
+        self.bot_zoey = start.zoey_orders
+
+        # Leo
+        self.bot_leo = ''
+
+        # Sal
+        self.bot_sal = ''
+
+
 
     def get_parameters(self):
-        src_path = r"D:\Arquivos HD\Projetos HD\SD Labs\JOBS\Ahmd\rocket\rocket_kitchens\Dashboard\View\Pages\output"
+        src_path = r"D:\Arquivos HD\Projetos HD\SD Labs\JOBS\Ahmd\rocket\rocket_kitchens_local_bot\robot_interface\model\robot_models\output"
         filename = 'File.csv'
         filepath = os.path.join(src_path, filename)
         params = Parameters(filepath)
@@ -42,8 +62,17 @@ class RobotLauncher:
         print(f'Values: {values}')
 
     def start_robots(self):
+
         if self.variable_name == self.extract_orders:
             self.bot_extract_orders()
+        if self.variable_name == self.zoey:
+            self.bot_zoey()
+        ...
+
+    def start_zoey(self):
+        if self.variable_name == self.zoey:
+            self.bot_zoey()
+
 
         ...
 
@@ -51,4 +80,5 @@ if __name__ == "__main__":
     rl = RobotLauncher()
     rl.get_parameters()
 
+    # rl.start_zoey()
     rl.start_robots()

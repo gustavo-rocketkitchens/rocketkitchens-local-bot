@@ -5,6 +5,8 @@ from rocket_kitchens_local_bot.robot_interface.model import observer_model
 from rocket_kitchens_local_bot.robot_interface.model.observer_model import Handler
 
 observer_process = None
+
+
 def start_controller(instance):
 
     global observer_process
@@ -26,6 +28,7 @@ def start_controller(instance):
 
     # Run the Python script
     print('observer_process = ', observer_process)
+
 
 def stop_controller(instance):
     global observer_process
