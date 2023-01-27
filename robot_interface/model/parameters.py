@@ -17,18 +17,29 @@ class Parameters:
 
         return my_dict
 
-    def get_row(self, row_index):
-        # Get the values of the specified row
-        row_values = self.df.iloc[row_index].values
+    # def get_row(self, row_index):
+    #     # Get the values of the specified row
+    #     row_values = self.df.iloc[row_index].values
+    #
+    #     # Assign the first cell value as the name of a variable
+    #     variable_name = row_values[0]
+    #
+    #     # Assign the rest of the cells as the values in a list
+    #     values = row_values[1:]
+    #
+    #     return variable_name, values
+
+    def get_row(self, variable_name):
+        # Get the row where the first column has the value "variable_name"
+        row_values = self.df.loc[self.df[self.df.columns[0]] == variable_name].values
 
         # Assign the first cell value as the name of a variable
-        variable_name = row_values[0]
+        variable_name = row_values[0][0]
 
         # Assign the rest of the cells as the values in a list
-        values = row_values[1:]
+        values = row_values[0][1:]
 
         return variable_name, values
-
 
 if __name__ == "__main__":
 
@@ -41,11 +52,18 @@ if __name__ == "__main__":
     # Read the CSV file and create the dictionary
     my_dict = params.read_csv()
 
+    # DO list as dict can raise in future as deprecated
+    # my_list = params.read_csv()
+
     # Print the dictionary to verify that it has been created correctly
     # print(my_dict)
+    print('my_list')
+    # print(my_list)
 
     # Call the get_row function, specifying the row index
-    variable_name, values = params.get_row(1)
+    # variable_name, values = params.get_row(1)
+
+    variable_name, values = params.get_row("Zoey")
 
     # Print the variable name and values to verify that they have been assigned correctly
     print(f'Variable name: {variable_name}')

@@ -55,7 +55,8 @@ class RobotLauncher:
         filepath = os.path.join(src_path, filename)
         params = Parameters(filepath)
 
-        self.variable_name, values = params.get_row(1)
+        # self.variable_name, values = params.get_row(1)
+        self.variable_name, values = params.get_row("Zoey")
 
         # Print the variable name and values to verify that they have been assigned correctly
         print(f'Variable name: {self.variable_name}')
