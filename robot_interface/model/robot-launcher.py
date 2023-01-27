@@ -47,8 +47,6 @@ class RobotLauncher:
         # Sal
         self.bot_sal = ''
 
-
-
     def get_parameters(self):
         src_path = r"D:\Arquivos HD\Projetos HD\SD Labs\JOBS\Ahmd\rocket\rocket_kitchens_local_bot\robot_interface\model\robot_models\output"
         filename = 'File.csv'
@@ -65,8 +63,10 @@ class RobotLauncher:
     def start_robots(self):
 
         if self.variable_name == self.extract_orders:
+            print('== self.extract_orders')
             self.bot_extract_orders()
         if self.variable_name == self.zoey:
+            print('== self.zoey')
             self.bot_zoey()
         ...
 
