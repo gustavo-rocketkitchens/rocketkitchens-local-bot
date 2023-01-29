@@ -60,15 +60,24 @@ class RobotLauncher:
         print(f'Variable name: {self.variable_name}')
         print(f'Values: {values}')
 
-    def start_robots(self):
+    # def start_robots(self):
+    #
+    #     if self.variable_name == self.extract_orders:
+    #         print('== self.extract_orders')
+    #         self.bot_extract_orders()
+    #     if self.variable_name == self.zoey:
+    #         print('== self.zoey')
+    #         self.bot_zoey()
+    #     ...
 
-        if self.variable_name == self.extract_orders:
-            print('== self.extract_orders')
-            self.bot_extract_orders()
-        if self.variable_name == self.zoey:
-            print('== self.zoey')
-            self.bot_zoey()
-        ...
+    def start_robots(self):
+        match self.variable_name:
+            case self.extract_orders:
+                self.bot_extract_orders()
+            case self.zoey:
+                self.bot_zoey()
+            case _:
+                print("Invalid variable name")
 
     def start_zoey(self):
         if self.variable_name == self.zoey:
