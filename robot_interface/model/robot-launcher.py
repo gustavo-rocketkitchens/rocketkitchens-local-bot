@@ -39,7 +39,7 @@ class RobotLauncher:
 
         # Zoey
         start = zoey.Start()
-        self.bot_zoey = start.zoey_orders
+        self.bot_zoey = start.zoey_process
 
         # Leo
         self.bot_leo = ''
@@ -60,16 +60,6 @@ class RobotLauncher:
         print(f'Variable name: {self.variable_name}')
         print(f'Values: {values}')
 
-    # def start_robots(self):
-    #
-    #     if self.variable_name == self.extract_orders:
-    #         print('== self.extract_orders')
-    #         self.bot_extract_orders()
-    #     if self.variable_name == self.zoey:
-    #         print('== self.zoey')
-    #         self.bot_zoey()
-    #     ...
-
     def start_robots(self):
         match self.variable_name:
             case self.extract_orders:
@@ -80,6 +70,8 @@ class RobotLauncher:
                 print("Invalid variable name")
 
     def start_zoey(self):
+
+        print('Starting all zoey process')
         if self.variable_name == self.zoey:
             self.bot_zoey()
 
@@ -92,3 +84,7 @@ if __name__ == "__main__":
 
     # rl.start_zoey()
     rl.start_robots()
+    # rl.start_zoey()
+    # rl.zoey_process()
+
+
