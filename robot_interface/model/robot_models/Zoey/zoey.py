@@ -10,7 +10,7 @@ import rpa as r
 
 # from rocket_kitchens.Admin import orders_execution_post
 
-from robot_models import orders_execution_post
+from robot_models import orders_execution_post as post
 
 class Start():
 
@@ -122,9 +122,13 @@ class Start():
     def zoey_process(self):
 
         self.zoey_orders()
+        print('successfully zoey orders')
         # self.zoey_reports()
         self.zoey_file_handler()
-        # self.zoey_post()
+        print('successfully zoey file handler')
+        self.zoey_post()
+        print('successfully zoey post')
+        print('successfully finished Zoey process')
         ...
 
     # zoey_post()
