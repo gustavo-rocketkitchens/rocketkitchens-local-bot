@@ -315,7 +315,7 @@ class TaskAutomator(Accesses):
 
         # main task
         r.init(visual_automation=True)
-        r.run("maximize")
+        r.run("maximize  (title='My Restaurant)")
         r.url("https://app.careemnow.com/auth/login")
 
         print("maximizing")
@@ -367,7 +367,7 @@ class TaskAutomator(Accesses):
 
         # main task
         r.init(visual_automation=True)
-        r.run("maximize")
+        r.run("maximize (title='My Restaurant)")
         r.url("https://app.careemnow.com/auth/login")
 
         r.wait(1)
@@ -412,7 +412,7 @@ class TaskAutomator(Accesses):
 
         # main task
         r.init(visual_automation=True)
-        r.run("maximize")
+        r.run("maximize (title='My Restaurant)")
         r.url(url)
 
         r.wait(1)
@@ -461,7 +461,7 @@ class TaskAutomator(Accesses):
 
         # main task
         r.init(visual_automation=True)
-        r.run("maximize")
+        r.run("maximize (title='My Restaurant)")
         r.url(url)
 
         print("maximizing")
@@ -531,7 +531,8 @@ class TaskAutomator(Accesses):
 
         # main task
         r.init(visual_automation=True)
-        r.run("maximize")
+
+        r.run("maximize (title='My Restaurant)")
         r.url(url)
 
         r.wait(1)
@@ -549,8 +550,10 @@ class TaskAutomator(Accesses):
         r.wait(2)
         r.click("//input[@id='login-email-field']")
         r.wait(2)
-        r.type("//input[@id='login-email-field']", "[clear]Dinarmohd@gmail.com")
+        r.type("//input[@id='login-email-field']", "{}".format("[clear]Dinarmohd@gmail.com"))
         r.type("//input[@id='login-password-field']", "MEATLABtalabat$&@")
+        # r.type("//input[@id='login-email-field']", "[clear]Dinarmohd@gmail.com")
+        # r.type("//input[@id='login-password-field']", "MEATLABtalabat$&@")
         r.wait(1)
         r.click("//button[@id='button_login']")
 
@@ -594,7 +597,7 @@ class TaskAutomator(Accesses):
 
         # main task
         r.init(visual_automation=True)
-        r.run("maximize")
+        r.run("maximize (title='My Restaurant)")
         r.url(url)
 
         print("maximizing")
@@ -763,6 +766,7 @@ class TaskAutomator(Accesses):
 
         r.keyboard("[alt][F4]")
         r.wait(1)
+
 
     # Deliveroo Extract Orders
     def deliveroo_extract_orders(self):
