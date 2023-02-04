@@ -1,5 +1,6 @@
 
 import os
+import subprocess
 import glob
 import numpy as np
 import matplotlib.pyplot as plt
@@ -68,6 +69,9 @@ class Content:
         self.del_rect_ord = float()  # Deliverect  extract orders
         self.del_rect_rep = float()  # Deliverect  extract reports
 
+        # Tabalat log in Platform: pass to 'enter talabat' function
+        self.username = None
+        self.password = None
 
 class Accesses(Content):
 
@@ -460,6 +464,9 @@ class TaskAutomator(Accesses):
         st = time.time()
 
         # main task
+        # os.system("pkill chrome")
+        ptg.hotkey('ctrl', 'w')
+
         r.init(visual_automation=True)
         r.run("maximize (title='My Restaurant)")
         r.url(url)
@@ -520,7 +527,13 @@ class TaskAutomator(Accesses):
             r.click(r"//button[normalize-space()='Later']")
 
     # Loggin Tabalat
-    def enter_talabat(self):
+
+
+    def enter_talabat(self, username=None,
+                      password=None):
+
+        # Get the username and password
+
 
         #OBS: get the "rate us pop up" that sometimes appear after logged.
 
@@ -528,18 +541,37 @@ class TaskAutomator(Accesses):
         # get the start time
         st = time.time()
 
-
+        # minimize dashboard
+        r.wait(1)
+        r.init(visual_automation=True)
+        r.keyboard("[alt][space]")
+        r.keyboard("n")
+        r.wait(1)
+        r.close()
+        r.wait(1)
         # main task
         r.init(visual_automation=True)
 
-        r.run("maximize (title='My Restaurant)")
+        r.run("focus(title='My Restaurant')")
+        r.run("maximize (title='My Restaurant')")
         r.url(url)
+        r.wait(1)
 
+
+        r.run("focus(title='My Restaurant')")
+        r.run("maximize (title='My Restaurant')")
+
+        r.wait(1)
+        r.run("maximize (title='My Restaurant')")
+        print("maximize (title='My Restaurant')")
         r.wait(1)
         print("maximizing")
         r.keyboard("[alt][space]")
         r.keyboard("x")
-
+        r.wait(2)
+        print("maximizing Con")
+        r.keyboard("[alt][space]")
+        r.keyboard("x")
         #Verify if exist username in input field
         # Type the username and password into input field
 
@@ -550,15 +582,13 @@ class TaskAutomator(Accesses):
         r.wait(2)
         r.click("//input[@id='login-email-field']")
         r.wait(2)
-        r.type("//input[@id='login-email-field']", "{}".format("[clear]Dinarmohd@gmail.com"))
-        r.type("//input[@id='login-password-field']", "MEATLABtalabat$&@")
+
+        r.type("//input[@id='login-email-field']", "{}".format('[clear]' + username))
+        r.type("//input[@id='login-password-field']", "{}".format(password))
         # r.type("//input[@id='login-email-field']", "[clear]Dinarmohd@gmail.com")
         # r.type("//input[@id='login-password-field']", "MEATLABtalabat$&@")
         r.wait(1)
         r.click("//button[@id='button_login']")
-
-        #r.wait(5)
-        #r.close()
 
         # get the end time
         et = time.time()

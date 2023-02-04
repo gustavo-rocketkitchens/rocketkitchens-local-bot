@@ -29,6 +29,7 @@ class RobotLauncher:
         self.zoey = 'Zoey'
         self.leo = 'Leo'
         self.sal = 'Sal'
+        # self.variable_name = None
 
         #===============================================================
         # Launch the following Robots:
@@ -39,7 +40,7 @@ class RobotLauncher:
 
         # Zoey
         start = zoey.Start()
-        self.bot_zoey = start.zoey_process
+        self.bot_zoey = start.zoey_process  # Instantiate but not start
 
         # Leo
         self.bot_leo = ''
@@ -55,7 +56,7 @@ class RobotLauncher:
 
         # self.variable_name, values = params.get_row(1)
         self.variable_name, values = params.get_row("Zoey")
-
+        print(f'robot-launcher function name: {self.variable_name} \n in get_parameters')
         # Print the variable name and values to verify that they have been assigned correctly
         print(f'Variable name: {self.variable_name}')
         print(f'Values: {values}')
@@ -65,7 +66,7 @@ class RobotLauncher:
             case self.extract_orders:
                 self.bot_extract_orders()
             case self.zoey:
-                self.bot_zoey()
+                self.bot_zoey()  # Start robot  with zoey parameters
             case _:
                 print("Invalid variable name")
 
