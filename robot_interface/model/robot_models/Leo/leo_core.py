@@ -226,6 +226,12 @@ class TaskAutomator(Accesses):
         r.wait(1)
 
     def talabat_sales_per_menu_item(self):
+        '''
+            Ranking of which menu items are the most and least popular.
+        Use this to see which of your menu items are trending up or down over time.
+        Note: this report does not include menu item additions like extra toppings.
+        '''
+
         # get the start time
         st = time.time()
 
@@ -235,7 +241,7 @@ class TaskAutomator(Accesses):
         r.wait(.5)
         r.click("div[data-testid='popular_dishes-subtitle'] button[type='button']")
         r.wait(.5)
-        r.click("//span[normalize-space()='Export in CSV']")
+        r.click("//span[normalize-space()='Export in Excel']")
         r.wait(.5)
         r.click("//button[normalize-space()='Export Report']")
 
@@ -248,7 +254,6 @@ class TaskAutomator(Accesses):
         print(type(elapsed_time))
         self.tab_rep = elapsed_time
 
-        ...
 
     def talabat_sales_per_area(self):
         # get the start time
@@ -282,6 +287,37 @@ class HandlerSheet(TaskAutomator):
     def __init__(self):
         TaskAutomator.__init__(self)
 
+    def talabat_read_menu_item(self):
+        """
+            Read menu items and let the worksheet active
+
+        """
+
+        # Read the latest popular dishes file:
+        path = os.path.dirname('../Leo/')
+        list_of_files = []
+
+        for f_name in os.listdir(path):
+            if f_name.startswith('popularDishes') and f_name.endswith('.xlsx'):
+                list_of_files.append(f_name)
+                print(list_of_files)
+        latest_file = max(list_of_files, key=os.path.getctime)
+
+        print("popularDishes: ", latest_file)
+
+        # Create the PATH FOR THE order_per_day file
+
+        self.popular_dishes = r"{}".format(str(latest_file))
+        print("popularDishes: ", self.popular_dishes)
+
+        # # Import your dataset (order_per_day), for example:
+        self.wb_popular_dishes = openpyxl.load_workbook(self.popular_dishes, keep_vba=False, data_only=False)
+
+        # order_per_day worksheet active:
+        self.ws_popular_dishes = self.wb_popular_dishes.active
+
+        # sheet active
+        self.sheet_ws_popular_dishes = self.wb_popular_dishes["Sheet1"]
 
 if __name__ == '__main__':
     print("Initializers")
@@ -302,3 +338,10 @@ if __name__ == '__main__':
     bot.talabat_sales_per_menu_item()
     # r.wait(4)
     # bot.talabat_sales_per_area()
+    # r.wait(4)
+    bot.exit_talabat()
+    r.wait(2)
+    bot.talabat_close_page()
+    bot.tab_time()
+    r.wait(2)
+    handler.talabat_read_menu_item()

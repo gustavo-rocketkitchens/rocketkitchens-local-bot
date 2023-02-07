@@ -1196,12 +1196,6 @@ class HandlerSheet(TaskAutomator):
 
         return sum_discount_values, sum_food_values, avg_comission, gross_profit
 
-
-
-
-
-
-
     def tabalat_get_average_order_value(self):
         self.wb_order_per_day = openpyxl.load_workbook(self.order_per_day, data_only=True)
         self.sheet_ws_opd = self.wb_order_per_day["Sheet1"]
@@ -1218,8 +1212,6 @@ class HandlerSheet(TaskAutomator):
         # print("avg_value: " , self.sheet_ws_opd[avg_value])
 
         ...
-
-
 
     # Get the last Order Details and turn in to a path
     # Call and Active the Worksheet
