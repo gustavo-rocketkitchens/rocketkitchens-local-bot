@@ -17,7 +17,8 @@ from robot_models import orders_execution_post as post
 # from rocket_kitchens_local_bot.robot_interface.model.parameters import Parameters
 from parameters import Parameters
 
-class Start():
+
+class Start:
 
 
     def __init__(self):

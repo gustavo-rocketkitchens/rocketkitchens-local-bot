@@ -9,11 +9,13 @@ headers = {
 }
 
 
-def post_request(sum_food_values, sum_discount_values, avg_comission, gross_profit):
+def post_request(sum_food_values=None, sum_discount_values=None, avg_comission=None, gross_profit=None, **kwargs):
     data = {"sum_food_values": sum_food_values,
             "sum_discount_values": sum_discount_values,
             "avg_comission": avg_comission,
             "gross_profit": gross_profit}
+    data.update(kwargs)
+
 
     req = requests.post(url, json=data, headers=headers)
     print(req.text)

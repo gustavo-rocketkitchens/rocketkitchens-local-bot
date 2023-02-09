@@ -53,6 +53,7 @@ class Content:
         self.username = None
         self.password = None
 
+
 class Accesses(Content):
 
 
@@ -91,7 +92,6 @@ class TaskAutomator(Accesses):
             r.click(r"//button[normalize-space()='Later']")
 
     # Loggin Tabalat
-
 
     def enter_talabat(self, username=None,
                       password=None):
@@ -220,7 +220,8 @@ class TaskAutomator(Accesses):
         time = self.tab_ord + self.tab_log + self.tab_rep
         print("Total Tabalat excution time: {} seconds".format(time))
 
-    def talabat_close_page(self):
+    @staticmethod
+    def talabat_close_page():
 
         r.keyboard("[alt][F4]")
         r.wait(1)
@@ -253,7 +254,6 @@ class TaskAutomator(Accesses):
         print('Extracting Sales Per Menu Item \n in Tabalat execution time:', elapsed_time, 'seconds')
         print(type(elapsed_time))
         self.tab_rep = elapsed_time
-
 
     def talabat_sales_per_area(self):
         # get the start time
@@ -319,29 +319,30 @@ class HandlerSheet(TaskAutomator):
         # sheet active
         self.sheet_ws_popular_dishes = self.wb_popular_dishes["Sheet1"]
 
-if __name__ == '__main__':
-    print("Initializers")
+    def talabat_menu_item_params(self):
 
-    print("Task Automator Class")
+        self.ws = self.sheet_ws_popular_dishes
 
-    bot = TaskAutomator()
-    print("HandlerSheet Class")
-    handler = HandlerSheet()
+        dish = []
+        total = []
+        sales = []
+        for row in self.ws.iter_rows(values_only=True):
+            if row[0] == "Dish":
+                continue
+            dish.append(row[0])
+            total.append(row[1])
+            sales.append(row[2])
+        # print('\ndish:', dish, '\ntotal:', total,  '\nsales:',  sales)
+        return dish, total, sales
 
-    # =======================================
-    #     Leo   execution: Report 1 (items analysis)
-    # You get the report from Talabat > reports > sales per menu items
-    # =======================================
-    #
-    bot.enter_talabat(username=None, password=None)
-    r.wait(12)
-    bot.talabat_sales_per_menu_item()
-    # r.wait(4)
-    # bot.talabat_sales_per_area()
-    # r.wait(4)
-    bot.exit_talabat()
-    r.wait(2)
-    bot.talabat_close_page()
-    bot.tab_time()
-    r.wait(2)
-    handler.talabat_read_menu_item()
+
+
+
+
+
+
+
+
+
+
+
