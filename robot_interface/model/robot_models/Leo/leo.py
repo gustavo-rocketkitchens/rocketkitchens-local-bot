@@ -76,8 +76,6 @@ class Start:
         r.wait(2)
         self.dish, self.total, self.sales = self.handler.talabat_menu_item_params()
 
-        print("successfully talabat read orders")
-        #
 
     def leo_post(self):
 
@@ -108,9 +106,9 @@ class Start:
         # self.zoey_reports()
         self.leo_file_handler()
         print('successfully leo file handler')
-        self.leo_post()
-        print('successfully leo post')
-        print('successfully finished leo process')
+        # self.leo_post()
+        # print('successfully leo post')
+        # print('successfully finished leo process')
 
         ...
 
