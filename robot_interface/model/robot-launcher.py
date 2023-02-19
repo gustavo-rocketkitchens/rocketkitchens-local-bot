@@ -7,8 +7,9 @@ import os
 
 #  To run in Pyinstaller
 from parameters import Parameters
+from robot_models.Sal import sal
+from robot_models.Leo import leo
 from robot_models.Zoey import zoey
-
 from robot_models import admin as ad
 
 
@@ -18,9 +19,8 @@ class RobotLauncher:
 
 
     def __init__(self):
-        bot = ad.TaskAutomator()
-        print("HandlerSheet Class")
-        handler = ad.HandlerSheet()
+
+        print("RobotLauncher Class")
 
         self.enter_talabat = 'Enter Talabat'
         self.extract_orders = 'Extract Orders'
@@ -29,63 +29,61 @@ class RobotLauncher:
         self.zoey = 'Zoey'
         self.leo = 'Leo'
         self.sal = 'Sal'
-        # self.variable_name = None
 
         #===============================================================
         # Launch the following Robots:
         #===============================================================
 
-        # self.bot_extract_orders =  bot.tabalat_extract_orders()
-        self.bot_extract_orders = bot.enter_talabat
-
         # Zoey
-        start = zoey.Start()
-        self.bot_zoey = start.zoey_process  # Instantiate but not start
+
+        self.bot_zoey = zoey.Start  # Instantiate but not start
 
         # Leo
-        self.bot_leo = ''
+
+        self.bot_leo = leo.Start  # Instantiate but not start
 
         # Sal
-        self.bot_sal = ''
+
+        self.bot_sal = sal.Start  # Instantiate but not start
 
     def get_parameters(self):
-        src_path = r"D:\Arquivos HD\Projetos HD\SD Labs\JOBS\Ahmd\rocket\rocket_kitchens_local_bot\robot_interface\model\robot_models\output"
+        # Navigate to the required folder
+        src_path = os.path.join(os.path.expanduser("~"), "Downloads", "output")
+
         filename = 'File.csv'
         filepath = os.path.join(src_path, filename)
         params = Parameters(filepath)
 
-        # self.variable_name, values = params.get_row(1)
-        self.variable_name, values = params.get_row("Zoey")
-        print(f'robot-launcher function name: {self.variable_name} \n in get_parameters')
+        # Get the first row of the dataframe
+        row = params.df.iloc[0]
+
+        # Extract the first value in the first cell of the row
+        parameter = row.iloc[0]
+
+        # Get the row for the extracted parameter
+        self.variable_name, values = params.get_row(parameter)
+
         # Print the variable name and values to verify that they have been assigned correctly
+        print(f'robot-launcher function name: {self.variable_name} \n in get_parameters')
         print(f'Variable name: {self.variable_name}')
         print(f'Values: {values}')
 
     def start_robots(self):
         match self.variable_name:
-            case self.extract_orders:
-                self.bot_extract_orders()
+
             case self.zoey:
-                self.bot_zoey()  # Start robot  with zoey parameters
+                self.bot_zoey().zoey_process()  # Start robot  with zoey parameters
+            case self.leo:
+                self.bot_leo().leo_process()
+            case self.sal:
+                self.bot_sal().sal_process()
             case _:
                 print("Invalid variable name")
 
-    def start_zoey(self):
-
-        print('Starting all zoey process')
-        if self.variable_name == self.zoey:
-            self.bot_zoey()
-
-
-        ...
 
 if __name__ == "__main__":
     rl = RobotLauncher()
     rl.get_parameters()
-
-    # rl.start_zoey()
     rl.start_robots()
-    # rl.start_zoey()
-    # rl.zoey_process()
 
 

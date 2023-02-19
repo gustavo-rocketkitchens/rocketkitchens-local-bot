@@ -1,8 +1,15 @@
 import os
+import glob
 
 import subprocess
+# Main Computer Compilation
 from rocket_kitchens_local_bot.robot_interface.model import observer_model
 from rocket_kitchens_local_bot.robot_interface.model.observer_model import Handler
+
+
+# Notebook Compilation
+# from robot_interface.model import observer_model
+# from robot_interface.model.observer_model import Handler
 
 observer_process = None
 
@@ -12,7 +19,9 @@ def start_controller(instance):
     global observer_process
 
     # Get the current working directory
+    # Get the current working directory
     cwd = os.getcwd()
+    print("observer_controller")
     print("I am here: ")
     print(cwd)
 
@@ -32,7 +41,13 @@ def start_controller(instance):
 
 def stop_controller(instance):
     global observer_process
-    src_path = r"D:\Arquivos HD\Projetos HD\SD Labs\JOBS\Ahmd\rocket\rocket_kitchens\Dashboard\View\Pages\output"
+    # Construct a platform-independent path to the output folder
+    output_dirname = 'output'
+    src_path = os.path.join(os.getcwd(), 'robot_interface', 'model', 'robot_models', output_dirname)
+
+    # Search for the output folder using the glob module
+    if not os.path.exists(src_path):
+        src_path = glob.glob(f'**/{output_dirname}', recursive=True)[0]
 
     # Get the current working directory
     cwd = os.getcwd()

@@ -79,19 +79,6 @@ class Accesses(Content):
     def __init__(self, **kwargs):
         Content.__init__(self, **kwargs)
 
-        # Path of the Accesses Spreadsheet
-        self.filename = r"D:\Arquivos HD\Projetos HD\SD Labs\JOBS\Ahmd\rocket\rocket_kitchens\assets\Accesses sheet.xlsx"
-
-        # Import your dataset, for example:
-        self.wb = openpyxl.load_workbook(self.filename)
-        # worksheet active:
-        self.ws = self.wb.active
-        # sheet active
-        self.sheet = self.wb["Sheet1"]
-
-        # example use of Cell Class
-        # self.cell = Cell(worksheet=self.ws, row=5, column=3)
-
     def lines(self):
 
         '''for row in self.ws.iter_rows(values_only=True, max_col=6):
@@ -1294,8 +1281,8 @@ class HandlerSheet(TaskAutomator):
     #
     #======================================
 
-
-if __name__ == '__main__':
+#
+# if __name__ == '__main__':
     # print("Accesses Class")
 
     # go = Accesses()
@@ -1320,13 +1307,13 @@ if __name__ == '__main__':
     #=======================================
     #      Initializers
     #=======================================
-    print("Initializers")
-    #print("Accesses Class")
-    # go = Accesses()
-    print("Task Automator Class")
-    bot = TaskAutomator()
-    print("HandlerSheet Class")
-    handler = HandlerSheet()
+    # print("Initializers")
+    # #print("Accesses Class")
+    # # go = Accesses()
+    # print("Task Automator Class in admin.py")
+    # bot = TaskAutomator()
+    # print("HandlerSheet Class admin.py")
+    # handler = HandlerSheet()
 
     #=======================================
     #      Orders execution

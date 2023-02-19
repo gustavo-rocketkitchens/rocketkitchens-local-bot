@@ -1,43 +1,75 @@
 import os
-
+import rpa as r
 import json
 import requests
 
-# from rocket_kitchens_local_bot.robot_interface.model.robot_models import orders_execution_post as post
-# from rocket_kitchens_local_bot.robot_interface.model.robot_models import orders_execution_get_request as get
-
-# from rocket_kitchens_local_bot.robot_interface.model.robot_models.admin import TaskAutomator, HandlerSheet
-from robot_models.admin import TaskAutomator, HandlerSheet
-import rpa as r
+# from zoey_core import TaskAutomator, HandlerSheet
 
 # from rocket_kitchens.Admin import orders_execution_post
 
-from robot_models import orders_execution_post as post
 
-# from rocket_kitchens_local_bot.robot_interface.model.parameters import Parameters
+# Local Bot
+
+from robot_models.Zoey.zoey_core import TaskAutomator, HandlerSheet
+from robot_models import orders_execution_post as post
 from parameters import Parameters
+
+#=======================================================================================================================
+
+# Felicidade PC
+# from rocket_kitchens_local_bot.robot_interface.model.robot_models.Zoey.zoey_core import TaskAutomator, HandlerSheet
+# from rocket_kitchens_local_bot.robot_interface.model.robot_models import orders_execution_post as post
+# from rocket_kitchens_local_bot.robot_interface.model.parameters import Parameters
+# from rocket_kitchens_local_bot.robot_interface.model.robot_models import orders_execution_get_request as get
+
+#=======================================================================================================================
+
+# Notebook
+# from robot_interface.model.robot_models import orders_execution_post as post
+# from robot_interface.model.parameters import Parameters
+
+#=======================================================================================================================
 
 
 class Start:
 
-
     def __init__(self):
-        self.username, self.password = self.get_parameters('Zoey')
+
         self.gross_profit = None
         self.avg_comission = None
         self.sum_food_values = None
         self.sum_discount_values = None
+        print("Initializers in Zoey")
+        print("Task Automator Class in Zoey")
         self.bot = TaskAutomator()
         self.handler = HandlerSheet()
 
 
-    def get_parameters(self, robot="Zoey"):
-        src_path = r"D:\Arquivos HD\Projetos HD\SD Labs\JOBS\Ahmd\rocket\rocket_kitchens_local_bot\robot_interface\model\robot_models\output"
+    def get_parameters(self):
+        # src_path = r"D:\Arquivos HD\Projetos HD\SD Labs\JOBS\Ahmd\rocket\rocket_kitchens_local_bot\robot_interface\model\robot_models\output"
+        # Notebook
+        # src_path = r"C:\Users\123\PycharmProjects\rocketkitchens-local-bot\robot_interface\model\robot_models\output"
+        src_path = os.path.join(os.path.expanduser("~"), "Downloads", "output")
+
         filename = 'File.csv'
         filepath = os.path.join(src_path, filename)
         params = Parameters(filepath)
 
-        self.username, self.password = params.get_pass(robot)
+        # Get the first row of the dataframe
+        row = params.df.iloc[0]
+
+        # Extract the first value in the first cell of the row
+        parameter = row.iloc[0]
+
+        # Get the row for the extracted parameter
+        self.variable_name, values = params.get_row(parameter)
+
+        # Print the variable name and values to verify that they have been assigned correctly
+        print(f'robot-launcher function name: {self.variable_name} \n in zoey.py')
+        print(f'Variable name: {self.variable_name}')
+        print(f'Values: {values}')
+
+        self.username, self.password = params.get_pass(self.variable_name)
 
         # Print the username and password to verify that they have been assigned correctly
         print(f'Username: {self.username}')
@@ -52,7 +84,12 @@ class Start:
         #---------------------------
         #Start Orders Extraction
         #---------------------------
+        print("instance: self.username, self.password = self.get_parameters() ")
+        self.username, self.password = self.get_parameters()
         self.bot.enter_talabat(username=self.username, password=self.password)
+
+
+
         r.wait(12)
         self.bot.last_week_orders()
         r.wait(4)
@@ -145,9 +182,9 @@ class Start:
         # self.zoey_reports()
         self.zoey_file_handler()
         print('successfully zoey file handler')
-        self.zoey_post()
-        print('successfully zoey post')
-        print('successfully finished Zoey process')
+        # self.zoey_post()
+        # print('successfully zoey post')
+        # print('successfully finished Zoey process')
 
         ...
 

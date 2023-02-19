@@ -1,12 +1,10 @@
 
 import os
 import time
-import pyautogui as ptg
-
 import rpa as r
 import openpyxl
 import pandas as pd
-
+from foreground_model import get_page_title, activate_window
 
 # =======================================================================
 # Class to parser and handle Accesses Sheet
@@ -61,14 +59,14 @@ class Accesses(Content):
         Content.__init__(self, **kwargs)
 
         # Path of the Accesses Spreadsheet
-        self.filename = r"D:\Arquivos HD\Projetos HD\SD Labs\JOBS\Ahmd\rocket\rocket_kitchens\assets\Accesses sheet.xlsx"
-
-        # Import your dataset, for example:
-        self.wb = openpyxl.load_workbook(self.filename)
-        # worksheet active:
-        self.ws = self.wb.active
-        # sheet active
-        self.sheet = self.wb["Sheet1"]
+        # self.filename = r"D:\Arquivos HD\Projetos HD\SD Labs\JOBS\Ahmd\rocket\rocket_kitchens\assets\Accesses sheet.xlsx"
+        #
+        # # Import your dataset, for example:
+        # self.wb = openpyxl.load_workbook(self.filename)
+        # # worksheet active:
+        # self.ws = self.wb.active
+        # # sheet active
+        # self.sheet = self.wb["Sheet1"]
 
 
 # =======================================================================
@@ -93,75 +91,82 @@ class TaskAutomator(Accesses):
 
     # Loggin Tabalat
 
-    def enter_talabat(self, username=None,
-                      password=None):
-
+    def enter_talabat(self, username=None, password=None):
         # Get the username and password
 
-
-        #OBS: get the "rate us pop up" that sometimes appear after logged.
+        # OBS: get the "rate us pop up" that sometimes appear after logged.
 
         url = r"https://talabat.portal.restaurant/login?redirect=/"
+
+        # Configure logging
+        logger = logging.getLogger(__name__)
+
         # get the start time
         st = time.time()
 
-        # minimize dashboard
-        r.wait(1)
-        r.init(visual_automation=True)
-        r.keyboard("[alt][space]")
-        r.keyboard("n")
-        r.wait(1)
-        r.close()
-        r.wait(1)
-        # main task
-        r.init(visual_automation=True)
+        # variables
 
-        r.run("focus(title='My Restaurant')")
-        r.run("maximize (title='My Restaurant')")
+        # # minimize dashboard
+        # r.wait(1)
+        # r.init(visual_automation=True)
+        # r.keyboard("[alt][space]")
+        # r.keyboard("n")
+        # r.wait(1)
+        # r.close()
+        # r.wait(1)
+        # main task
+
+        r.init(visual_automation=True)
+        title = get_page_title("https://talabat.portal.restaurant/login?redirect=/")
+        focus = "focus(title='{}')".format(title)
+        maximize = "maximize (title='{}')".format(title)
+        r.run(focus)
+        r.run(maximize)
         r.url(url)
         r.wait(1)
 
-
-        r.run("focus(title='My Restaurant')")
-        r.run("maximize (title='My Restaurant')")
-
+        r.run(focus)
+        r.run(maximize)
+        activate_window(title)
         r.wait(1)
-        r.run("maximize (title='My Restaurant')")
-        print("maximize (title='My Restaurant')")
-        r.wait(1)
-        print("maximizing")
+        r.run(maximize)
+        logger.info("Maximizing")
         r.keyboard("[alt][space]")
         r.keyboard("x")
         r.wait(2)
-        print("maximizing Con")
+        logger.info("Maximizing Con")
         r.keyboard("[alt][space]")
         r.keyboard("x")
-        #Verify if exist username in input field
+
+        # Verify if exist username in input field
         # Type the username and password into input field
 
         r.wait(2)
-
 
         r.type("//input[@id='login-email-field']", '[clear]')
         r.wait(2)
         r.click("//input[@id='login-email-field']")
         r.wait(2)
 
-        # r.type("//input[@id='login-email-field']", "{}".format('[clear]' + username))
-        # r.type("//input[@id='login-password-field']", "{}".format(password))
-        r.type("//input[@id='login-email-field']", "[clear]Dinarmohd@gmail.com")
-        r.type("//input[@id='login-password-field']", "MEATLABtalabat$&@")
+        r.type("//input[@id='login-email-field']", "{}".format('[clear]' + username))
+        r.type("//input[@id='login-password-field']", "{}".format(password))
+        # r.type("//input[@id='login-email-field']", "[clear]Dinarmohd@gmail.com")
+        # r.type("//input[@id='login-password-field']", "MEATLABtalabat$&@")
         r.wait(1)
         r.click("//button[@id='button_login']")
+        r.wait(3)
+        title = get_page_title("https://talabat.portal.restaurant/dashboard")
+        activate_window(title)
 
         # get the end time
         et = time.time()
 
         # get the execution time
         elapsed_time = et - st
-        print('Log in Tabalat execution time:', elapsed_time, 'seconds')
+        logger.info('Log in Tabalat execution time: %s seconds', elapsed_time)
 
         self.tab_log = elapsed_time
+
 
     # Loggout Tabalat
     def exit_talabat(self):
@@ -294,7 +299,7 @@ class HandlerSheet(TaskAutomator):
         """
 
         # Read the latest popular dishes file:
-        path = os.path.dirname('../Leo/')
+        path = os.path.dirname('../dependencies/robot_models/Leo')
         list_of_files = []
 
         for f_name in os.listdir(path):

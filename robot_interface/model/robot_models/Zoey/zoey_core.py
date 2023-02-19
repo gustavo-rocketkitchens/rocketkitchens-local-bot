@@ -3,7 +3,7 @@
 import os
 import time
 import pyautogui as ptg
-
+import logging
 # =====================================================================
 #  The libraries below are to handle rpa and xlsx.
 # =====================================================================
@@ -11,7 +11,8 @@ import pyautogui as ptg
 import rpa as r
 import openpyxl
 import pandas as pd
-
+# from rocket_kitchens_local_bot.robot_interface.model.foreground_model import get_page_title, activate_window
+from foreground_model import get_page_title, activate_window
 # =======================================================================
 # Class to parser and handle Accesses Sheet
 # =======================================================================
@@ -64,14 +65,14 @@ class Accesses(Content):
         Content.__init__(self, **kwargs)
 
         # Path of the Accesses Spreadsheet
-        self.filename = r"D:\Arquivos HD\Projetos HD\SD Labs\JOBS\Ahmd\rocket\rocket_kitchens\assets\Accesses sheet.xlsx"
-
-        # Import your dataset, for example:
-        self.wb = openpyxl.load_workbook(self.filename)
-        # worksheet active:
-        self.ws = self.wb.active
-        # sheet active
-        self.sheet = self.wb["Sheet1"]
+        # self.filename = r"D:\Arquivos HD\Projetos HD\SD Labs\JOBS\Ahmd\rocket\rocket_kitchens\assets\Accesses sheet.xlsx"
+        #
+        # # Import your dataset, for example:
+        # self.wb = openpyxl.load_workbook(self.filename)
+        # # worksheet active:
+        # self.ws = self.wb.active
+        # # sheet active
+        # self.sheet = self.wb["Sheet1"]
 
         # example use of Cell Class
         # self.cell = Cell(worksheet=self.ws, row=5, column=3)
@@ -512,55 +513,57 @@ class TaskAutomator(Accesses):
 
     # Loggin Tabalat
 
-
-    def enter_talabat(self, username=None,
-                      password=None):
-
+    def enter_talabat(self, username=None, password=None):
         # Get the username and password
 
-
-        #OBS: get the "rate us pop up" that sometimes appear after logged.
+        # OBS: get the "rate us pop up" that sometimes appear after logged.
 
         url = r"https://talabat.portal.restaurant/login?redirect=/"
+
+        # Configure logging
+        logger = logging.getLogger(__name__)
+
         # get the start time
         st = time.time()
 
-        # minimize dashboard
-        r.wait(1)
-        r.init(visual_automation=True)
-        r.keyboard("[alt][space]")
-        r.keyboard("n")
-        r.wait(1)
-        r.close()
-        r.wait(1)
-        # main task
-        r.init(visual_automation=True)
+        # variables
 
-        r.run("focus(title='My Restaurant')")
-        r.run("maximize (title='My Restaurant')")
+        # # minimize dashboard
+        # r.wait(1)
+        # r.init(visual_automation=True)
+        # r.keyboard("[alt][space]")
+        # r.keyboard("n")
+        # r.wait(1)
+        # r.close()
+        # r.wait(1)
+        # main task
+
+        r.init(visual_automation=True)
+        title = get_page_title("https://talabat.portal.restaurant/login?redirect=/")
+        focus = "focus(title='{}')".format(title)
+        maximize = "maximize (title='{}')".format(title)
+        r.run(focus)
+        r.run(maximize)
         r.url(url)
         r.wait(1)
 
-
-        r.run("focus(title='My Restaurant')")
-        r.run("maximize (title='My Restaurant')")
-
+        r.run(focus)
+        r.run(maximize)
+        activate_window(title)
         r.wait(1)
-        r.run("maximize (title='My Restaurant')")
-        print("maximize (title='My Restaurant')")
-        r.wait(1)
-        print("maximizing")
+        r.run(maximize)
+        logger.info("Maximizing")
         r.keyboard("[alt][space]")
         r.keyboard("x")
         r.wait(2)
-        print("maximizing Con")
+        logger.info("Maximizing Con")
         r.keyboard("[alt][space]")
         r.keyboard("x")
-        #Verify if exist username in input field
+
+        # Verify if exist username in input field
         # Type the username and password into input field
 
         r.wait(2)
-
 
         r.type("//input[@id='login-email-field']", '[clear]')
         r.wait(2)
@@ -573,13 +576,16 @@ class TaskAutomator(Accesses):
         # r.type("//input[@id='login-password-field']", "MEATLABtalabat$&@")
         r.wait(1)
         r.click("//button[@id='button_login']")
+        r.wait(3)
+        title = get_page_title("https://talabat.portal.restaurant/dashboard")
+        activate_window(title)
 
         # get the end time
         et = time.time()
 
         # get the execution time
         elapsed_time = et - st
-        print('Log in Tabalat execution time:', elapsed_time, 'seconds')
+        logger.info('Log in Tabalat execution time: %s seconds', elapsed_time)
 
         self.tab_log = elapsed_time
 
@@ -591,13 +597,14 @@ class TaskAutomator(Accesses):
         r.click("//div[normalize-space()='Logout']")
         r.wait(2)
 
-
         # get the end time
         et = time.time()
 
         # get the execution time
         elapsed_time = et - st
-        print('Log out Tabalat execution time:', elapsed_time, 'seconds')
+
+        # Log execution time
+        logging.info('Log out Tabalat execution time: %s seconds', elapsed_time)
 
         self.tab_log = elapsed_time
 
@@ -648,55 +655,51 @@ class TaskAutomator(Accesses):
         st = time.time()
 
         # main task
-
         r.click("//a[@data-testid='link-orders']")  # Today
         r.wait(2)
         r.click("//span[normalize-space()='Today']")
 
-
-        print('variable no_orders')
+        logging.info('Checking no_orders')
         no_orders = r.get_text("No Orders to show")
-        print(no_orders)
+        logging.info(f'no_orders value: {no_orders}')
         if no_orders == 'No Orders to show':
             r.click("//span[normalize-space()='Yesterday']")
             r.dclick("//span[normalize-space()='Yesterday']")
 
-
         r.wait(1)
-        r.click("//div[@class='plugin-muiv4-MuiBox-root plugin-muiv4-jss6']//button[@type='button']") # Export Button
+        r.click("//div[@class='plugin-muiv4-MuiBox-root plugin-muiv4-jss6']//button[@type='button']")  # Export Button
         # Export Orders Details
         r.click("//div[normalize-space()='Today']")  # Today
-        r.click("//input[@value='XLSX']")            # xlsx
+        r.click("//input[@value='XLSX']")  # xlsx
         r.click("//span[normalize-space()='Download Report']")
 
         r.wait(2)
-
 
         # get the end time
         et = time.time()
 
         # get the execution time
         elapsed_time = et - st
-        print('Extracting Orders in Tabalat execution time:', elapsed_time, 'seconds')
-        print(type(elapsed_time))
+        logging.info(f'Extracting Orders in Tabalat execution time: {elapsed_time} seconds')
+        logging.info(f'elapsed_time type: {type(elapsed_time)}')
         self.tab_ord = elapsed_time
 
-        #tabalat_extract
-
     def last_week_orders(self):
+        # create logger
+        logger = logging.getLogger(__name__)
+
         # get the start time
         st = time.time()
 
         # main task
-        print("clicking in orders")
+        logger.info("clicking in orders")
         r.wait(2)
         r.click("//a[@data-testid='link-orders']")
         r.click("//a[@data-testid='link-orders']")
         r.click("//a[@data-testid='link-orders']")
         r.wait(2)
         r.click("//a[@data-testid='link-orders']")
-        print("orders clicked ")
-
+        logger.info("orders clicked ")
 
         # Last Week
         r.click("//body//div//div[@data-testid='content-container-new']//div//div//div//div//div[2]//div[1]//button[1]")
@@ -704,37 +707,21 @@ class TaskAutomator(Accesses):
         r.click("//div[normalize-space()='Last week']")
 
         r.wait(2)
-        # Select .xlsx formt to donwload
+        # Select .xlsx format to download
         r.click("//input[@value='XLSX']")  # xlsx
         r.wait(2)
         # Download Report
         r.click("//span[normalize-space()='Download Report']")
 
-        # print('variable no_orders')
-        # no_orders = r.get_text("No Orders to show")
-        # print(no_orders)
-        # if no_orders == 'No Orders to show':
-        #     r.click("//span[normalize-space()='Yesterday']")
-        #     r.dclick("//span[normalize-space()='Yesterday']")
-        #
-        #
-        # r.wait(1)
-        # r.click("//div[@class='plugin-muiv4-MuiBox-root plugin-muiv4-jss6']//button[@type='button']") # Export Button
-        # # Export Orders Details
-        # r.click("//div[normalize-space()='Today']")  # Today
-        # r.click("//input[@value='XLSX']")            # xlsx
-        # r.click("//span[normalize-space()='Download Report']")
-
         r.wait(2)
-
 
         # get the end time
         et = time.time()
 
         # get the execution time
         elapsed_time = et - st
-        print('Extracting Orders in Tabalat execution time:', elapsed_time, 'seconds')
-        #print(type(elapsed_time))
+        logger.info('Extracting Orders in Tabalat execution time: %s seconds', elapsed_time)
+        # print(type(elapsed_time))
         self.tab_ord = elapsed_time
 
     # Talabat Extract Reports
@@ -876,7 +863,7 @@ class HandlerSheet(TaskAutomator):
 
     def __init__(self):
         TaskAutomator.__init__(self)
-
+        self.logger = logging.getLogger(__name__)
     #======================================
     # Talabat Orders
     #======================================
@@ -904,6 +891,8 @@ class HandlerSheet(TaskAutomator):
 
     # Read (after downloaded) the latest ordersPerDay and active worksheet
     def talabat_read_average_order_per_day(self):
+        # Set up logging
+        logging.basicConfig(filename='example.log', level=logging.INFO)
 
         # Read the latest ordersPerDay file:
         path = os.path.dirname('../LocalBot/')
@@ -911,14 +900,13 @@ class HandlerSheet(TaskAutomator):
         for f_name in os.listdir(path):
             if f_name.startswith('ordersPerDay') and f_name.endswith('.xlsx'):
                 list_of_files.append(f_name)
-                print(list_of_files)
+                logging.info(f"List of files: {list_of_files}")
         latest_file = max(list_of_files, key=os.path.getctime)
-        print("latest_file: ", latest_file)
+        logging.info(f"Latest file: {latest_file}")
 
         # Create the PATH FOR THE order_per_day file
         self.order_per_day = r"{}".format(str(latest_file))
-        print("order_per_day: ", self.order_per_day)
-
+        logging.info(f"Order per day: {self.order_per_day}")
 
         # # Import your dataset (order_per_day), for example:
         self.wb_order_per_day = openpyxl.load_workbook(self.order_per_day, keep_vba=False, data_only=False)
@@ -931,29 +919,28 @@ class HandlerSheet(TaskAutomator):
     # Get the average order per day from column B
     def tabalat_average_order_per_day(self):
         """
-            Sum all Food Value Column
-            -------------------------
+        Sum all Food Value Column
+        -------------------------
 
-            Go to Orders Column to find
-            average order per day
-
+        Go to Orders Column to find
+        average order per day
         """
 
         max_row = "B{}".format(self.sheet_ws_opd.max_row)
         len_average_order = self.sheet_ws_opd.max_row + 1
-        print('Get average order')
+        logging.info('Getting average order')
+
         # for food_value in self.sheet['S2':max_row]:
         #     for n in food_value:
-        #         print(n.value)
+        #         logging.info(n.value)
 
-        print("max order row: ", max_row)
-        print("average value: ", len_average_order)
+        logging.info("max order row: %s", max_row)
+        logging.info("average value: %s", len_average_order)
         self.average = "B{}".format(len_average_order)
-        print("average: ", self.average)
-
+        logging.info("average: %s", self.average)
 
         self.sheet_ws_opd[self.average] = '= AVERAGE(B2:{})'.format(max_row)
-        #
+
         # Save the File with the average updated
         self.wb_order_per_day.save(self.order_per_day)
 
@@ -1013,178 +1000,120 @@ class HandlerSheet(TaskAutomator):
     # right -> =SOMA(U2:UN)where N is the last cell in row
     def tabalat_average_discount(self):
         """
-            Sum all Discount column
-
-        """
-
+                Sum all Discount column
+                """
         max_row = "U{}".format(self.sheet.max_row)
-
         len_discount_value = self.sheet.max_row + 1
-        #len_discount_value = self.sheet.max_row
-        print('Sum all Discount column')
-        # for food_value in self.sheet['U2':max_row]:  # section to extraction of table names for the new tables.
-        #     for n in food_value:
-        #         print(n.value)
 
-        print("max rox: ", max_row)
-        print("discount value: ", len_discount_value)
+        self.logger.info('Summing all Discount column')
+        self.logger.info("max row: %s", max_row)
+        self.logger.info("discount value: %s", len_discount_value)
+
         average = "U{}".format(len_discount_value)
-
-        # Save the food average value
         self.sheet[average] = '= SUM(U2:{})'.format(max_row)
 
-        # Save the File with the average updated
         self.wb.save(self.filename)
-        ...
 
     # right -> =S41-U42 where N is the
 
     # Order Details Not Order Per Day
     def tabalat_average_comission(self):
-        # print(self.sheet['S'].max_row)
+        logger = logging.getLogger(__name__)
         ws = self.sheet
         max_row_for_s = max((s.row for s in ws['S'] if s.value is not None))
         max_row_for_u = max((u.row for u in ws['U'] if u.value is not None))
-        print("Max Row for Column S", max_row_for_s, type(max_row_for_s))
-        print("Max Row for Column U", max_row_for_u, type(max_row_for_u))
+        logger.info("Max Row for Column S: %s, type: %s", max_row_for_s, type(max_row_for_s))
+        logger.info("Max Row for Column U: %s, type: %s", max_row_for_u, type(max_row_for_u))
 
-        #food_less_discount = ws["S{}".format(max_row_for_s)]-ws["U{}".format(max_row_for_u)].value
-        # print("food_less_discount: ", food_less_discount)
-
-
-        # get the values of S and U column
         last_s_value = ws["S{}".format(max_row_for_s)].value
         last_u_value = ws["U{}".format(max_row_for_u)].value
-
-        # get the coordinates of S and U column
         max_row_s = ws["S{}".format(int(max_row_for_s))].coordinate
         max_row_u = ws["U{}".format(int(max_row_for_u))].coordinate
 
+        logger.info("last_s_value: %s", last_s_value)
+        logger.info("last_u_value: %s", last_u_value)
+        logger.info('max_row_s: %s', max_row_s)
+        logger.info('S value: %s', ws[max_row_s])
+        logger.info('U value: %s', ws[max_row_u])
 
-
-        print("last_s_value: ", last_s_value)
-        print("last_u_value: ", last_u_value)
-        print('max_row_s')
-        print(max_row_s)
-        print(ws[max_row_s])
-        print(ws[max_row_u])
-
-
-
-        # Change the assign
-        # Save the food average value
         ws["W559"] = "AVG comission"
         ws["W30"] = '={}-{}'.format(max_row_s, max_row_u)
-        # ws["W30"] = '=(S25-U26)'.format(max_row_s, max_row_u)
 
-        print(ws["W30"].value)
-        # Save the File with the average updated
+        logger.info("Value in cell W30: %s", ws["W30"].value)
+
         self.wb.save(self.filename)
-
-        # verificar valor usando pandas
-        # comission_value= "pd"
 
     # Order Details Not Order Per Day
     def tabalat_gross_profit(self):
-
+        # Configure logging
+        logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
         # read the last details order
         ws = self.sheet
 
-
-
         # Read the latest ordersPerDay file:
-
         path = os.path.dirname('../LocalBot/')
         list_of_files = []
         for f_name in os.listdir(path):
             if f_name.startswith('orderDetails') and f_name.endswith('.xlsx'):
                 list_of_files.append(f_name)
-                print(list_of_files)
+                logging.info("Found file: %s", f_name)
         latest_file = max(list_of_files, key=os.path.getctime)
-        print("latest orderDetails file : ", latest_file)
+        logging.info("Latest orderDetails file: %s", latest_file)
 
         # Create the PATH FOR THE order_per_day file
         self.order_details = r"{}".format(str(latest_file))
-        print("Order Details: ", self.order_details)
+        logging.info("Order Details: %s", self.order_details)
 
-
-        # # Import your dataset (order_per_day), for example:
+        # Import your dataset (order_per_day), for example:
         self.wb_order_details = openpyxl.load_workbook(self.order_details, data_only=False)
-
 
         # order_details worksheet active:
         self.ws = self.wb_order_details.active
-
-        # print(self.wb_order_details["Sheet1"]["W30"])
-        # print(self.ws["S93"].value)
-        # print(self.ws["U94"].value)
-
+        logging.info("Cell values: %s, %s, %s", self.wb_order_details["Sheet1"]["W30"], self.ws["S93"].value,
+                     self.ws["U94"].value)
+        time.sleep(1)
 
         food_values = []
         max_row = "S{}".format(self.ws.max_row)
-        len_average_order = self.ws.max_row + 1
-        print('Get average Food Value')
+        logging.info('Getting average food value')
         for food_value in self.ws['S2':max_row]:
             for n in food_value:
                 if n.value is not None:
                     food_values.append(n.value)
+        time.sleep(1)
 
-
-                    # print(n.value)
-
-
-        print('food_values: ')
-        print(food_values[:-1])
+        logging.info('Food values: %s', food_values[:-1])
         sum_food_values = sum(food_values[:-1])
-        print('sum_food_values')
-        print(sum_food_values)
+        logging.info('Sum food values: %s', sum_food_values)
+        time.sleep(1)
 
         discount_values = []
         max_row = "U{}".format(self.ws.max_row)
-        print('Get average Discount')
+        logging.info('Getting average discount')
         for discount in self.ws['U2':max_row]:
             for n in discount:
-
                 if n.value is not None:
                     discount_values.append(n.value)
 
-
-                    # print(n.value)
-
-        print('discount_values: ')
-        print(discount_values[:-1])
+        time.sleep(1)
+        logging.info('Discount values: %s', discount_values[:-1])
         sum_discount_values = sum(discount_values[:-1])
-        print('sum_discount_values')
-        print(sum_discount_values)
+        logging.info('Sum discount values: %s', sum_discount_values)
 
-        #======================================
         # Comission
-
         # s-u
-        avg_comission = (sum_food_values-sum_discount_values)*(30/100)
-        print('avg_comission')
-        print(avg_comission)
+        avg_comission = (sum_food_values - sum_discount_values) * (30 / 100)
+        logging.info('Avg comission: %s', avg_comission)
 
-        # Save the File with the average updated
+        # Gross Profit
+        gross_profit = sum_food_values - sum_discount_values - avg_comission
+        logging.info('Gross profit: %s', gross_profit)
+
+        # Save the file with the average updated
         self.wb.save(self.filename)
 
-        #======================================
-        # Gross Profit
-
-        gross_profit = sum_food_values-sum_discount_values-avg_comission
-        print('gross profit')
-        print(gross_profit)
-
-
-
         return sum_discount_values, sum_food_values, avg_comission, gross_profit
-
-
-
-
-
-
 
     def tabalat_get_average_order_value(self):
         self.wb_order_per_day = openpyxl.load_workbook(self.order_per_day, data_only=True)
@@ -1202,8 +1131,6 @@ class HandlerSheet(TaskAutomator):
         # print("avg_value: " , self.sheet_ws_opd[avg_value])
 
         ...
-
-
 
     # Get the last Order Details and turn in to a path
     # Call and Active the Worksheet

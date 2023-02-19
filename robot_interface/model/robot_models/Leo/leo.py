@@ -1,25 +1,39 @@
 import os
-
+import rpa as r
 import json
 import requests
 
-from leo_core import TaskAutomator, HandlerSheet
-import rpa as r
+# from leo_core import TaskAutomator, HandlerSheet
+from robot_models.Leo.leo_core import TaskAutomator, HandlerSheet
 
 # from rocket_kitchens.Admin import orders_execution_post
 
-# from robot_models import orders_execution_post as post
-from rocket_kitchens_local_bot.robot_interface.model.robot_models  import orders_execution_post as post
+# =======================================================================================================================
+
+# Local Bot
+from robot_models import orders_execution_post as post
+from parameters import Parameters
+
+# =======================================================================================================================
+
+# Felicidade PC
+# from rocket_kitchens_local_bot.robot_interface.model.robot_models  import orders_execution_post as post
 # from rocket_kitchens_local_bot.robot_interface.model.parameters import Parameters
-# from parameters import Parameters
-from rocket_kitchens_local_bot.robot_interface.model.parameters import Parameters
+
+# =======================================================================================================================
+
+# Notebook
+# from robot_interface.model.robot_models import orders_execution_post as post
+# from robot_interface.model.parameters import Parameters
+
+
+# =======================================================================================================================
 
 
 class Start:
 
 
     def __init__(self):
-        # self.username, self.password = self.get_parameters('Leo')
         self.sales = None
         self.total = None
         self.dish = None
@@ -32,13 +46,28 @@ class Start:
         self.bot = TaskAutomator()
         self.handler = HandlerSheet()
 
-    def get_parameters(self, robot="Zoey"):
-        src_path = r"D:\Arquivos HD\Projetos HD\SD Labs\JOBS\Ahmd\rocket\rocket_kitchens_local_bot\robot_interface\model\robot_models\output"
+    def get_parameters(self):
+        src_path = os.path.join(os.path.expanduser("~"), "Downloads", "output")
+
         filename = 'File.csv'
         filepath = os.path.join(src_path, filename)
         params = Parameters(filepath)
 
-        self.username, self.password = params.get_pass(robot)
+        # Get the first row of the dataframe
+        row = params.df.iloc[0]
+
+        # Extract the first value in the first cell of the row
+        parameter = row.iloc[0]
+
+        # Get the row for the extracted parameter
+        self.variable_name, values = params.get_row(parameter)
+
+        # Print the variable name and values to verify that they have been assigned correctly
+        print(f'robot-launcher function name: {self.variable_name} \n in zoey.py')
+        print(f'Variable name: {self.variable_name}')
+        print(f'Values: {values}')
+
+        self.username, self.password = params.get_pass(self.variable_name)
 
         # Print the username and password to verify that they have been assigned correctly
         print(f'Username: {self.username}')
@@ -46,13 +75,14 @@ class Start:
         return self.username, self.password
 
     def leo_reports_menu_item(self):
-
         # =======================================
         #     Leo   execution: Report 1 (items analysis)
         # You get the report from Talabat > reports > sales per menu items
         # =======================================
         #
-        self.bot.enter_talabat(username=None, password=None)
+        print("leo_reports_menu_item instance: \n self.username, self.password = self.get_parameters() ")
+        self.username, self.password = self.get_parameters()
+        self.bot.enter_talabat(username=self.username, password=self.password)
         r.wait(12)
         self.bot.talabat_sales_per_menu_item()
         # r.wait(4)
@@ -101,20 +131,20 @@ class Start:
 
     def leo_process(self):
 
-        # self.leo_reports_menu_item()
+        self.leo_reports_menu_item()
         print('successfully leo reports menu item')
-        # self.zoey_reports()
+
         self.leo_file_handler()
-        print('successfully leo file handler')
+        # print('successfully leo file handler')
         # self.leo_post()
         # print('successfully leo post')
         # print('successfully finished leo process')
 
         ...
 
-if __name__ == '__main__':
-    start = Start()
-    start.leo_process()
+# if __name__ == '__main__':
+#     start = Start()
+#     start.leo_process()
 
 
 
