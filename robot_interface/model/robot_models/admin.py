@@ -9,9 +9,8 @@ import pyautogui as ptg
 
 
 # for future
-import pyinputplus as i
+
 import logging
-import sched
 from datetime import datetime, timedelta
 
 # =====================================================================
@@ -53,7 +52,6 @@ class Content:
         self.empty_aggregator_link = []
         self.empty_ticket_link_careem = []
         self.empty_partner_id_careem = []
-
 
 
         # Collect Execution time
