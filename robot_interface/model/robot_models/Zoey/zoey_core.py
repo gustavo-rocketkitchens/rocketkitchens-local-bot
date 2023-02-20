@@ -1,5 +1,4 @@
 
-
 import os
 import time
 import pyautogui as ptg
@@ -365,16 +364,16 @@ class TaskAutomator(Accesses):
         r.keyboard("x")
         print("logging out")
 
-        #r.wait(1)
+        # r.wait(1)
         # Click in center to close google translator pop-up
-        #r.click("//button[2]")
+        # r.click("//button[2]")
 
         r.wait(1)
         # Clink in navbar to get the loggout button
         r.click("//li[@class='ant-menu-submenu ant-menu-submenu-horizontal']")
         r.click("Ziryab Al Quoz 2 Call center")
         r.click("Log Out")
-        #r.click("Log out")
+        # r.click("Log out")
         r.wait(1)
         r.close()
         # get the end time
@@ -629,7 +628,7 @@ class TaskAutomator(Accesses):
 
         r.click("//span[contains(text(),'Login')]")
         r.wait(3)
-        #r.click("//span[normalize-space()='Continue with Email']")
+        # r.click("//span[normalize-space()='Continue with Email']")
         r.click("Continue with Email")
         r.wait(1)
         r.type("Email", 'ahmd@rocketkitchens.com')
@@ -737,7 +736,8 @@ class TaskAutomator(Accesses):
         r.click("//div[normalize-space()='last 7 days']")  # 7 days reports
         r.click("//button[normalize-space()='Submit']")  # submit
         r.wait(2)
-        r.click("//div[@data-testid='performance_report-subtitle']//div//button[@type='button'][normalize-space()='Download Report']")
+        r.click \
+            ("//div[@data-testid='performance_report-subtitle']//div//button[@type='button'][normalize-space()='Download Report']")
         r.click("//input[@value='XLSX']")  # Choose XLSX File
         r.click("//button[normalize-space()='Export Report']")  # Export Report Button
 
@@ -748,7 +748,7 @@ class TaskAutomator(Accesses):
         r.keyboard("[enter]")
 
         # To choose date from range
-        #r.click("//button[@aria-label='calendar view is open, go to text input view']")
+        # r.click("//button[@aria-label='calendar view is open, go to text input view']")
 
         # get the end time
         et = time.time()
@@ -864,9 +864,10 @@ class HandlerSheet(TaskAutomator):
     def __init__(self):
         TaskAutomator.__init__(self)
         self.logger = logging.getLogger(__name__)
-    #======================================
+
+    # ======================================
     # Talabat Orders
-    #======================================
+    # ======================================
 
     # Zoey Bot:
     def tabalat_process_orders(self):
@@ -955,7 +956,6 @@ class HandlerSheet(TaskAutomator):
                              names=None)
 
 
-
     # Solve it:
     # s = sum
     # u = sum
@@ -971,14 +971,14 @@ class HandlerSheet(TaskAutomator):
                             Sum all Food column
 
                         """
-
+        # 19/02/23 -> Food Value Column changed from S to V column.
         # Verify how much lines each column has
         # it count maximum lines in the spreadsheet
-        max_row = "S{}".format(self.sheet.max_row)
+        max_row = "V{}".format(self.sheet.max_row)
 
         # it get the maximum row and add plus 1 in S column
         len_discount_value = self.sheet.max_row + 1
-        #len_discount_value = self.sheet.max_row
+        # len_discount_value = self.sheet.max_row
         print('Sum all Food column')
         # for food_value in self.sheet['U2':max_row]:  # section to extraction of table names for the new tables.
         #     for n in food_value:
@@ -986,14 +986,14 @@ class HandlerSheet(TaskAutomator):
 
         print("max rox: ", max_row)
         print("Food value: ", len_discount_value)
-        average = "S{}".format(len_discount_value)
+        average = "V{}".format(len_discount_value)
 
         # Save the food average value
-        self.sheet[average] = '= SUM(S2:{})'.format(max_row)
+        self.sheet[average] = '= SUM(V2:{})'.format(max_row)
 
         # Save the File with the average updated
         self.wb.save(self.filename)
-        ...
+
 
     # Order Details Not Order Per Day
 
@@ -1002,15 +1002,17 @@ class HandlerSheet(TaskAutomator):
         """
                 Sum all Discount column
                 """
-        max_row = "U{}".format(self.sheet.max_row)
+
+        # 19/02/23 -> Discount Column changed from U to X column.
+        max_row = "X{}".format(self.sheet.max_row)
         len_discount_value = self.sheet.max_row + 1
 
         self.logger.info('Summing all Discount column')
         self.logger.info("max row: %s", max_row)
         self.logger.info("discount value: %s", len_discount_value)
 
-        average = "U{}".format(len_discount_value)
-        self.sheet[average] = '= SUM(U2:{})'.format(max_row)
+        average = "X{}".format(len_discount_value)
+        self.sheet[average] = '= SUM(X2:{})'.format(max_row)
 
         self.wb.save(self.filename)
 
@@ -1020,26 +1022,26 @@ class HandlerSheet(TaskAutomator):
     def tabalat_average_comission(self):
         logger = logging.getLogger(__name__)
         ws = self.sheet
-        max_row_for_s = max((s.row for s in ws['S'] if s.value is not None))
-        max_row_for_u = max((u.row for u in ws['U'] if u.value is not None))
-        logger.info("Max Row for Column S: %s, type: %s", max_row_for_s, type(max_row_for_s))
-        logger.info("Max Row for Column U: %s, type: %s", max_row_for_u, type(max_row_for_u))
+        max_row_for_v = max((v.row for v in ws['V'] if v.value is not None))
+        max_row_for_x = max((x.row for x in ws['X'] if x.value is not None))
+        logger.info("Max Row for Column V: %s, type: %s", max_row_for_v, type(max_row_for_v))
+        logger.info("Max Row for Column X: %s, type: %s", max_row_for_x, type(max_row_for_x))
 
-        last_s_value = ws["S{}".format(max_row_for_s)].value
-        last_u_value = ws["U{}".format(max_row_for_u)].value
-        max_row_s = ws["S{}".format(int(max_row_for_s))].coordinate
-        max_row_u = ws["U{}".format(int(max_row_for_u))].coordinate
+        last_v_value = ws["V{}".format(max_row_for_v)].value
+        last_x_value = ws["X{}".format(max_row_for_x)].value
+        max_row_v = ws["V{}".format(int(max_row_for_v))].coordinate
+        max_row_x = ws["X{}".format(int(max_row_for_x))].coordinate
 
-        logger.info("last_s_value: %s", last_s_value)
-        logger.info("last_u_value: %s", last_u_value)
-        logger.info('max_row_s: %s', max_row_s)
-        logger.info('S value: %s', ws[max_row_s])
-        logger.info('U value: %s', ws[max_row_u])
+        logger.info("last_v_value: %s", last_v_value)
+        logger.info("last_x_value: %s", last_x_value)
+        logger.info('max_row_v: %s', max_row_v)
+        logger.info('V value: %s', ws[max_row_v])
+        logger.info('X value: %s', ws[max_row_x])
 
-        ws["W559"] = "AVG comission"
-        ws["W30"] = '={}-{}'.format(max_row_s, max_row_u)
+        ws["AE51"] = "AVG comission"
+        ws["AE50"] = '={}-{}'.format(max_row_v, max_row_x)
 
-        logger.info("Value in cell W30: %s", ws["W30"].value)
+        logger.info("Value in cell AE50: %s", ws["AE50"].value)
 
         self.wb.save(self.filename)
 
@@ -1070,14 +1072,14 @@ class HandlerSheet(TaskAutomator):
 
         # order_details worksheet active:
         self.ws = self.wb_order_details.active
-        logging.info("Cell values: %s, %s, %s", self.wb_order_details["Sheet1"]["W30"], self.ws["S93"].value,
+        logging.info("Cell values: %s, %s, %s", self.wb_order_details["Sheet1"]["AE50"], self.ws["AE50"].value,
                      self.ws["U94"].value)
         time.sleep(1)
 
         food_values = []
-        max_row = "S{}".format(self.ws.max_row)
+        max_row = "V{}".format(self.ws.max_row)
         logging.info('Getting average food value')
-        for food_value in self.ws['S2':max_row]:
+        for food_value in self.ws['V2':max_row]:
             for n in food_value:
                 if n.value is not None:
                     food_values.append(n.value)
@@ -1089,9 +1091,9 @@ class HandlerSheet(TaskAutomator):
         time.sleep(1)
 
         discount_values = []
-        max_row = "U{}".format(self.ws.max_row)
+        max_row = "X{}".format(self.ws.max_row)
         logging.info('Getting average discount')
-        for discount in self.ws['U2':max_row]:
+        for discount in self.ws['X2':max_row]:
             for n in discount:
                 if n.value is not None:
                     discount_values.append(n.value)
@@ -1164,14 +1166,14 @@ class HandlerSheet(TaskAutomator):
 
         return self.wb_order_details
 
+    # filename = talabat_order_details_filename()
 
-    #filename = talabat_order_details_filename()
-
-    #======================================
+    # ======================================
     #  Talabat Reports
-    #======================================
+    # ======================================
 
     # Leo Bot:
+
 
     def tabalat_process_reports(self):
         pass
@@ -1182,19 +1184,13 @@ class HandlerSheet(TaskAutomator):
     def tabalat_report_sales_by_area(self):
         pass
 
-
-    #======================================
+    # ======================================
     #  Talabat Financials Reports
-    #======================================
+    # ======================================
 
-
-
-
-
-
-    #======================================
+    # ======================================
     #  Talabat Financials Reports
-    #======================================
+    # ======================================
 
 
     def deliveroo_process_orders(self):
@@ -1209,6 +1205,6 @@ class HandlerSheet(TaskAutomator):
     def careem_process_orders(self):
         pass
 
-    #======================================
+    # ======================================
     #
-    #======================================
+    # ======================================
