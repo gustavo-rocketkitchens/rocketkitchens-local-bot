@@ -1,10 +1,10 @@
 import os
 import subprocess
+import logging
 
 import watchdog.events
 import watchdog.observers
 import time
-
 
 
 class Handler(watchdog.events.PatternMatchingEventHandler):
@@ -15,36 +15,43 @@ class Handler(watchdog.events.PatternMatchingEventHandler):
                                                              case_sensitive=False)
         self.process_running = False  # Add flag to keep track of whether the process is running
         self.file_processed = []  # Initialize list to keep track of processed files
+        self.logger = logging.getLogger(__name__)
 
     def on_created(self, event):
-        print("Watchdog received created event - % s." % event.src_path)
+        self.logger.info("Watchdog received created event - %s.", event.src_path)
         # Event is created, you can process it now
         ...
 
     def on_modified(self, event):
-        print("Watchdog received modified event - % s." % event.src_path)
+        self.logger.info("Watchdog received modified event - %s.", event.src_path)
 
         if event.src_path in self.file_processed:
-            print("File already processed. Skipping.")
-        else:
-            # Add path to list of processed files
-            self.file_processed.append(event.src_path)
+            # File has been processed before, remove from the list
+            self.file_processed.remove(event.src_path)
 
-            if not self.process_running:  # Only start the process if it's not already running
-                navigation_model = "dependencies/navigation_model.py"
+        if not self.process_running:  # Only start the process if it's not already running
+            navigation_model = "dependencies/navigation_model.py"
+            dist_robot_interface = "dependencies/robot-launcher.py"
+            if os.path.exists(dist_robot_interface):
+                minimize = 5
+                self.logger.info("minimize = 5")
+                for i in range(minimize):
+                    subprocess.Popen(['python', navigation_model])
+                    time.sleep(0.1)  # Add a brief pause to prevent overloading the system
+                subprocess.Popen(['python', dist_robot_interface])
+                self.process_running = True  # Set flag to indicate that the process is running
 
-                dist_robot_interface = "dependencies/robot-launcher.py"
-                if os.path.exists(dist_robot_interface):
+    def on_deleted(self, event):
+        self.logger.info("Watchdog received deleted event - %s.", event.src_path)
+        if event.src_path == "file.csv":
+            # If the file that was deleted is the file we are monitoring, stop the process and set the flag to False
+            self.process_running = False
+            stop_process()
 
-                    minimize = 5
-                    print("minimize = 5")
-
-                    for i in range(minimize):
-                        subprocess.Popen(['python', navigation_model])
-                        time.sleep(0.1)  # Add a brief pause to prevent overloading the system
-
-                    subprocess.Popen(['python', dist_robot_interface])
-                    self.process_running = True  # Set flag to indicate that the process is running
+        if event.src_path in self.file_processed:
+            # Remove the deleted file from the list of processed files
+            self.file_processed.remove(event.src_path)
+            self.logger.info("File deleted. Removed from processed list.")
 
 
 def start_observer(src_path):
@@ -66,12 +73,27 @@ def stop_observer():
     observer.stop()
 
 
+def stop_process():
+    # Stop the process by finding its PID and killing it
+    process_name = "robot-launcher.py"
+    pid = None
+    for proc in psutil.process_iter():
+        if process_name in proc.name():
+            pid = proc.pid
+            break
+    if pid is not None:
+        os.kill(pid, signal.SIGTERM)
+
+
 if __name__ == "__main__":
     home_dir = os.path.expanduser("~")
     output_dir = os.path.join(home_dir, "Downloads", "output")
 
-    print('output_dir:', output_dir)
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    logger = logging.getLogger(__name__)
+
+    logger.info('output_dir: %s', output_dir)
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
-    print("start_observer({})".format(output_dir))
+    logger.info("start_observer(%s)", output_dir)
     start_observer(output_dir)
