@@ -155,6 +155,9 @@ class Start:
         self.sum_discount_values, self.sum_food_values, self.avg_comission, self.gross_profit = self.handler.tabalat_gross_profit()
         r.wait(4)
         print("successfully talabat gross profit - \n also return 4 output values")
+        r.wait(2)
+        self.handler.delete_output_file("File.csv")
+        print("successfully delete output file")
         ...
 
     def zoey_post(self):

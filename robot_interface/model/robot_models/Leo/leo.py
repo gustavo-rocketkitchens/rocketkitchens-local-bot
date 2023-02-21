@@ -105,7 +105,9 @@ class Start:
         self.handler.talabat_read_menu_item()
         r.wait(2)
         self.dish, self.total, self.sales = self.handler.talabat_menu_item_params()
-
+        r.wait(2)
+        self.handler.delete_output_file("File.csv")
+        print("successfully delete output file")
 
     def leo_post(self):
 

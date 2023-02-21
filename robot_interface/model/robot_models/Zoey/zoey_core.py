@@ -1184,6 +1184,25 @@ class HandlerSheet(TaskAutomator):
     def tabalat_report_sales_by_area(self):
         pass
 
+    def delete_output_file(self, filename):
+        home_dir = os.path.expanduser("~")
+        output_dir = os.path.join(home_dir, "Downloads", "output")
+        filepath = os.path.join(output_dir, filename)
+
+        if os.path.exists(filepath):
+            os.remove(filepath)
+            print(f"{filepath} deleted.")
+        else:
+            print(f"{filepath} does not exist.")
+
+
+
+
+
+
+
+
+
     # ======================================
     #  Talabat Financials Reports
     # ======================================

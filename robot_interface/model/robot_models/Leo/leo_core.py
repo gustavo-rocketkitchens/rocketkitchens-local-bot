@@ -340,7 +340,16 @@ class HandlerSheet(TaskAutomator):
         # print('\ndish:', dish, '\ntotal:', total,  '\nsales:',  sales)
         return dish, total, sales
 
+    def delete_output_file(self, filename):
+        home_dir = os.path.expanduser("~")
+        output_dir = os.path.join(home_dir, "Downloads", "output")
+        filepath = os.path.join(output_dir, filename)
 
+        if os.path.exists(filepath):
+            os.remove(filepath)
+            print(f"{filepath} deleted.")
+        else:
+            print(f"{filepath} does not exist.")
 
 
 
