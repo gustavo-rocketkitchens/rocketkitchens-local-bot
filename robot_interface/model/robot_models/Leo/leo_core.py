@@ -299,7 +299,7 @@ class HandlerSheet(TaskAutomator):
         """
 
         # Read the latest popular dishes file:
-        path = os.path.dirname('../dependencies/robot_models/Leo')
+        path = os.path.dirname('../LocalBot/')
         list_of_files = []
 
         for f_name in os.listdir(path):
