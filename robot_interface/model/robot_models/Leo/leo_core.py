@@ -5,7 +5,7 @@ import rpa as r
 import openpyxl
 import pandas as pd
 from foreground_model import get_page_title, activate_window
-import logging
+
 # =======================================================================
 # Class to parser and handle Accesses Sheet
 # =======================================================================
