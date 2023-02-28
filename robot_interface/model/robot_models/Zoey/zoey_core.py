@@ -120,12 +120,12 @@ class Accesses(Content):
                 coor = n.coordinate
                 row_number = n.row
                 val = n.value
-                print(coor, row_number, val)
+                logging.info(coor, row_number, val)
 
                 if self.cell_empty(val, n):
                     self.empty_platform_access.append(coor)
 
-        print("Empty cells: ", self.empty_platform_access)
+        logging.info("Empty cells: ", self.empty_platform_access)
 
     def username(self):
         '''
@@ -137,14 +137,14 @@ class Accesses(Content):
         '''
 
         # for col in self.ws.iter_cols(values_only=True, max_col=6):
-        #     print(col)
+        #     logging.info(col)
         username_column = self.sheet['B2':'B25']
         for i in username_column:
             for n in i:  # read the cell in sheet
                 coor = n.coordinate
                 row_number = n.row
                 val = n.value
-                print(coor, row_number, val)
+                logging.info(coor, row_number, val)
 
                 if self.cell_empty(val, n):
                     self.empty_access_id.append(row_number)
@@ -153,8 +153,8 @@ class Accesses(Content):
         for i in range(1, 22):
             ...
 
-        print("Size Username: {}".format(len(username_column)))
-        print("Empty cells: ", self.empty_access_id)
+        logging.info("Size Username: {}".format(len(username_column)))
+        logging.info("Empty cells: ", self.empty_access_id)
         pass
 
     def credentials(self):
@@ -174,12 +174,12 @@ class Accesses(Content):
                 coor = n.coordinate
                 row_number = n.row
                 val = n.value
-                print(coor, row_number, val)
+                logging.info(coor, row_number, val)
 
                 if self.cell_empty(val, n):
                     self.empty_access_id.append(row_number)
 
-        print("Empty cells: ", self.empty_access_id)
+        logging.info("Empty cells: ", self.empty_access_id)
         pass
 
     def links(self):
@@ -196,12 +196,12 @@ class Accesses(Content):
                 coor = n.coordinate
                 row_number = n.row
                 val = n.value
-                print(coor, row_number, val)
+                logging.info(coor, row_number, val)
 
                 if self.cell_empty(val, n):
                     self.empty_aggregator_link.append(row_number)
 
-        print("Empty cells: ", self.empty_aggregator_link)
+        logging.info("Empty cells: ", self.empty_aggregator_link)
         pass
 
     def ticket_link_careem(self):
@@ -214,19 +214,19 @@ class Accesses(Content):
         '''
 
         # for col in self.ws.iter_cols(values_only=True, max_col=6):
-        #     print(col)
+        #     logging.info(col)
 
         for i in self.sheet['E1':'E25']:
             for n in i:  # read the cell in sheet
                 coor = n.coordinate
                 row_number = n.row
                 val = n.value
-                print(coor, row_number, val)
+                logging.info(coor, row_number, val)
 
                 if self.cell_empty(val, n):
                     self.empty_ticket_link_careem.append(row_number)
 
-        print("Empty cells: ", self.empty_ticket_link_careem)
+        logging.info("Empty cells: ", self.empty_ticket_link_careem)
 
     def partner_id_careem(self):
         '''
@@ -238,19 +238,19 @@ class Accesses(Content):
         '''
 
         # for col in self.ws.iter_cols(values_only=True, max_col=6):
-        #     print(col)
+        #     logging.info(col)
 
         for i in self.sheet['F1':'F25']:
             for n in i:  # read the cell in sheet
                 coor = n.coordinate
                 row_number = n.row
                 val = n.value
-                print(coor, row_number, val)
+                logging.infoprint(coor, row_number, val)
 
                 if self.cell_empty(val, n):
                     self.empty_partner_id_careem.append(row_number)
 
-        print("Empty cells: ", self.empty_partner_id_careem)
+        logging.info("Empty cells: ", self.empty_partner_id_careem)
 
     def select_cell(self):
 
@@ -260,11 +260,11 @@ class Accesses(Content):
 
     def max_rows(self):
         self.max_col = self.sheet.max_column
-        print(self.sheet.max_row)
+        logging.info(self.sheet.max_row)
         return self.max_col
 
     def max_columns(self):
-        print(self.sheet.max_column)
+        logging.info(self.sheet.max_column)
         self.max_col = self.sheet.max_column
         return self.max_col
 
@@ -306,7 +306,7 @@ class TaskAutomator(Accesses):
         r.run("maximize  (title='My Restaurant)")
         r.url("https://app.careemnow.com/auth/login")
 
-        print("maximizing")
+        logging.info("maximizing")
         r.keyboard("[alt][space]")
         r.keyboard("x")
 
@@ -314,7 +314,7 @@ class TaskAutomator(Accesses):
         try:
 
             log_another = r.exist("//span[contains(text(),'Log in with another email')]")
-            print(log_another)
+            logging.info(log_another)
 
             r.wait(1)
             # If Log in with another email button don't exist: pass
@@ -345,7 +345,7 @@ class TaskAutomator(Accesses):
 
         # get the execution time
         elapsed_time = et - st
-        print('Log in Careem execution time:', elapsed_time, 'seconds')
+        logging.info('Log in Careem execution time:', elapsed_time, 'seconds')
 
     # Loggout Careem
     @staticmethod
@@ -359,10 +359,10 @@ class TaskAutomator(Accesses):
         r.url("https://app.careemnow.com/auth/login")
 
         r.wait(1)
-        print("maximizing")
+        logging.info("maximizing")
         r.keyboard("[alt][space]")
         r.keyboard("x")
-        print("logging out")
+        logging.info("logging out")
 
         # r.wait(1)
         # Click in center to close google translator pop-up
@@ -381,7 +381,7 @@ class TaskAutomator(Accesses):
 
         # get the execution time
         elapsed_time = et - st
-        print('Log out Careem execution time:', elapsed_time, 'seconds')
+        logging.info('Log out Careem execution time:', elapsed_time, 'seconds')
 
     def careem_orders(self):
         ...
@@ -404,7 +404,7 @@ class TaskAutomator(Accesses):
         r.url(url)
 
         r.wait(1)
-        print("maximizing")
+        logging.info("maximizing")
         r.keyboard("[alt][space]")
         r.keyboard("x")
 
@@ -430,7 +430,7 @@ class TaskAutomator(Accesses):
 
         # get the execution time
         elapsed_time = et - st
-        print('Log in Deliveroo execution time:', elapsed_time, 'seconds')
+        logging.info('Log in Deliveroo execution time:', elapsed_time, 'seconds')
 
         self.del_log = elapsed_time
         pass
@@ -455,7 +455,7 @@ class TaskAutomator(Accesses):
         r.run("maximize (title='My Restaurant)")
         r.url(url)
 
-        print("maximizing")
+        logging.info("maximizing")
         r.wait(3)
 
 
@@ -470,12 +470,12 @@ class TaskAutomator(Accesses):
         r.click("//body//div//div//div//div//header//div//div//div//a[normalize-space()='Sign in']")
         # r.wait(8)
 
-        print("get screen size")
+        logging.info("get screen size")
 
-        print(ptg.size())
-        print("get mouse position")
+        logging.info(ptg.size())
+        logging.info("get mouse position")
 
-        print(ptg.position())
+        logging.info(ptg.position())
 
         r.read("//input[@placeholder='yours@example.com']")
         r.type("//input[@placeholder='yours@example.com']", '[clear]')
@@ -494,7 +494,7 @@ class TaskAutomator(Accesses):
 
         # get the execution time
         elapsed_time = et - st
-        print('Log in Deliverect execution time:', elapsed_time, 'seconds')
+        logging.info('Log in Deliverect execution time:', elapsed_time, 'seconds')
 
         self.del_rect_log = elapsed_time
         pass
@@ -621,7 +621,7 @@ class TaskAutomator(Accesses):
         r.run("maximize (title='My Restaurant)")
         r.url(url)
 
-        print("maximizing")
+        logging.info("maximizing")
         r.keyboard("[alt][space]")
         r.keyboard("x")
 
@@ -642,7 +642,7 @@ class TaskAutomator(Accesses):
 
         # get the execution time
         elapsed_time = et - st
-        print('Log in Zomato execution time:', elapsed_time, 'seconds')
+        logging.info('Log in Zomato execution time:', elapsed_time, 'seconds')
         pass
 
     # Loggout Zomato
@@ -721,7 +721,7 @@ class TaskAutomator(Accesses):
         # get the execution time
         elapsed_time = et - st
         logger.info('Extracting Orders in Tabalat execution time: %s seconds', elapsed_time)
-        # print(type(elapsed_time))
+        # logging.info(type(elapsed_time))
         self.tab_ord = elapsed_time
 
     # Talabat Extract Reports
@@ -756,13 +756,13 @@ class TaskAutomator(Accesses):
 
         # get the execution time
         elapsed_time = et - st
-        print('Extracting Reports in Tabalat execution time:', elapsed_time, 'seconds')
-        print(type(elapsed_time))
+        logging.info('Extracting Reports in Tabalat execution time:', elapsed_time, 'seconds')
+        logging.info(type(elapsed_time))
         self.tab_rep = elapsed_time
 
     def tab_time(self):
         time = self.tab_ord + self.tab_log + self.tab_rep
-        print("Total Tabalat excution time: {} seconds".format(time))
+        logging.info("Total Tabalat excution time: {} seconds".format(time))
 
     def talabat_close_page(self):
 
@@ -789,7 +789,7 @@ class TaskAutomator(Accesses):
         r.wait(2)
         r.click("//button[@aria-label='Close']")    # Close
 
-        print("We’re creating a report and it’ll be \n in your email inbox in 5-10 minutes.")
+        logging.info("We’re creating a report and it’ll be \n in your email inbox in 5-10 minutes.")
 
 
         r.wait(2)
@@ -800,14 +800,14 @@ class TaskAutomator(Accesses):
 
         # get the execution time
         elapsed_time = et - st
-        print('Extracting Orders in Deliveroo execution time:', elapsed_time, 'seconds')
+        logging.info('Extracting Orders in Deliveroo execution time:', elapsed_time, 'seconds')
 
         self.del_ord = elapsed_time
 
     # Deliveroo Total Time Execution
     def del_time(self):
         time = self.del_rect_ord + self.del_rect_log + self.del_rect_rep
-        print("Total Deliverect execution time: {} seconds".format(time))
+        logging.info("Total Deliverect execution time: {} seconds".format(time))
 
     # Deliverect Extract Orders
     def deliverect_extract_orders(self):
@@ -831,7 +831,7 @@ class TaskAutomator(Accesses):
         r.wait(2)
         r.click("//button[@aria-label='Close']")    # Close
 
-        print("We’re creating a report and it’ll be \n in your email inbox in 5-10 minutes.")
+        logging.info("We’re creating a report and it’ll be \n in your email inbox in 5-10 minutes.")
 
 
         r.wait(2)
@@ -842,14 +842,14 @@ class TaskAutomator(Accesses):
 
         # get the execution time
         elapsed_time = et - st
-        print('Extracting Orders in Deliveroo execution time:', elapsed_time, 'seconds')
+        logging.info('Extracting Orders in Deliveroo execution time:', elapsed_time, 'seconds')
 
         self.del_ord = elapsed_time
 
     # Deliverect Total Time Execution
     def del_rect_time(self):
         time = self.del_ord + self.del_log + self.del_rep
-        print("Total Deliveroo excution time: {} seconds".format(time))
+        logging.info("Total Deliveroo excution time: {} seconds".format(time))
 
 
 # =======================================================================
@@ -980,13 +980,13 @@ class HandlerSheet(TaskAutomator):
         # it get the maximum row and add plus 1 in S column
         len_discount_value = self.sheet.max_row + 1
         # len_discount_value = self.sheet.max_row
-        print('Sum all Food column')
+        logging.info('Sum all Food column')
         # for food_value in self.sheet['U2':max_row]:  # section to extraction of table names for the new tables.
         #     for n in food_value:
-        #         print(n.value)
+        #         logging.info(n.value)
 
-        print("max rox: ", max_row)
-        print("Food value: ", len_discount_value)
+        logging.info("max rox: ", max_row)
+        logging.info("Food value: ", len_discount_value)
         average = "V{}".format(len_discount_value)
 
         # Save the food average value
@@ -1123,15 +1123,15 @@ class HandlerSheet(TaskAutomator):
         self.sheet_ws_opd = self.wb_order_per_day["Sheet1"]
         avg_coord = self.sheet_ws_opd[self.average].coordinate
         avg_value = self.sheet_ws_opd[self.average].value
-        print("avg_coord :",  avg_coord)
-        # print(avg_value)
+        logging.info("avg_coord :",  avg_coord)
+        # logging.info(avg_value)
         x = self.sheet_ws_opd["{}".format(str(avg_coord))]
 
 
 
-        print(x)
-        print("avg_coord: ", x)
-        # print("avg_value: " , self.sheet_ws_opd[avg_value])
+        logging.info(x)
+        logging.info("avg_coord: ", x)
+        # logging.info("avg_value: " , self.sheet_ws_opd[avg_value])
 
         ...
 
@@ -1151,12 +1151,12 @@ class HandlerSheet(TaskAutomator):
         for f_name in os.listdir(path):
             if f_name.startswith('orderDetails') and f_name.endswith('.xlsx'):
                 list_of_files.append(f_name)
-                print(list_of_files)
+                logging.info(list_of_files)
         latest_file = max(list_of_files, key=os.path.getctime)
-        print("latest_file orderDetails: ", latest_file)
+        logging.info("latest_file orderDetails: ", latest_file)
 
         self.order_details = r"{}".format(str(latest_file))
-        print("orderDetails': ", self.order_details)
+        logging.info("orderDetails': ", self.order_details)
 
         # # Import your dataset, for example:
         self.wb_order_details = openpyxl.load_workbook(self.order_details, data_only=True)
@@ -1192,9 +1192,9 @@ class HandlerSheet(TaskAutomator):
 
         if os.path.exists(filepath):
             os.remove(filepath)
-            print(f"{filepath} deleted.")
+            logging.info(f"{filepath} deleted.")
         else:
-            print(f"{filepath} does not exist.")
+            logging.info(f"{filepath} does not exist.")
 
 
 

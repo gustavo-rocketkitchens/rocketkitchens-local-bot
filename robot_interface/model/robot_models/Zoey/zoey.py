@@ -2,6 +2,7 @@ import os
 import rpa as r
 import json
 import requests
+import logging
 
 # from zoey_core import TaskAutomator, HandlerSheet
 
@@ -34,13 +35,12 @@ from parameters import Parameters
 class Start:
 
     def __init__(self):
-
         self.gross_profit = None
         self.avg_comission = None
         self.sum_food_values = None
         self.sum_discount_values = None
-        print("Initializers in Zoey")
-        print("Task Automator Class in Zoey")
+        logging.info("Initializers in Zoey")
+        logging.info("Task Automator Class in Zoey")
         self.bot = TaskAutomator()
         self.handler = HandlerSheet()
 
@@ -65,26 +65,26 @@ class Start:
         self.variable_name, values = params.get_row(parameter)
 
         # Print the variable name and values to verify that they have been assigned correctly
-        print(f'robot-launcher function name: {self.variable_name} \n in zoey.py')
-        print(f'Variable name: {self.variable_name}')
-        print(f'Values: {values}')
+        logging.info(f'robot-launcher function name: {self.variable_name} \n in zoey.py')
+        logging.info(f'Variable name: {self.variable_name}')
+        logging.info(f'Values: {values}')
 
         self.username, self.password = params.get_pass(self.variable_name)
 
         # Print the username and password to verify that they have been assigned correctly
-        print(f'Username: {self.username}')
-        print(f'Password: {self.password}')
+        logging.info(f'Username: {self.username}')
+        logging.info(f'Password: {self.password}')
         return self.username, self.password
 
     def zoey_orders(self):
 
         # Add Zoey Robots:
-        print('start zoey_orders ')
+        logging.info('start zoey_orders ')
 
         #---------------------------
         #Start Orders Extraction
         #---------------------------
-        print("instance: self.username, self.password = self.get_parameters() ")
+        logging.info("instance: self.username, self.password = self.get_parameters() ")
         self.username, self.password = self.get_parameters()
         self.bot.enter_talabat(username=self.username, password=self.password)
 
@@ -103,7 +103,7 @@ class Start:
 
     def zoey_reports(self):
 
-        print('start zoey_reports')
+        logging.info('start zoey_reports')
 
         # =======================================
         #      Zoey execution: Reports
@@ -121,55 +121,55 @@ class Start:
 
     def zoey_file_handler(self):
 
-        print('start zoey_file_handler')
+        logging.info('start zoey_file_handler')
 
         # ---------------------------
         # Start File Handler
         # ---------------------------
 
-        print("starting talabat read orders")
+        logging.info("starting talabat read orders")
         self.handler.talabat_read_orders()
         r.wait(4)
-        print("successfully talabat read orders")
+        logging.info("successfully talabat read orders")
         #
 
-        print("starting talabat average food")
+        logging.info("starting talabat average food")
         self.handler.tabalat_average_food()
         r.wait(4)
-        print("successfully talabat average food")
+        logging.info("successfully talabat average food")
 
 
-        print("starting talabat average discount")
+        logging.info("starting talabat average discount")
         self.handler.tabalat_average_discount()
         r.wait(4)
-        print("successfully talabat average discount")
+        logging.info("successfully talabat average discount")
 
 
-        print("starting talabat average comission")
+        logging.info("starting talabat average comission")
         self.handler.tabalat_average_comission()
         r.wait(4)
-        print("successfully talabat average comission")
+        logging.info("successfully talabat average comission")
 
-        print("starting talabat gross profit")
+        logging.info("starting talabat gross profit")
         # The last OP. gross profit function also return 4 output values
         self.sum_discount_values, self.sum_food_values, self.avg_comission, self.gross_profit = self.handler.tabalat_gross_profit()
         r.wait(4)
-        print("successfully talabat gross profit - \n also return 4 output values")
+        logging.info("successfully talabat gross profit - \n also return 4 output values")
         r.wait(2)
         self.handler.delete_output_file("File.csv")
-        print("successfully delete output file")
+        logging.info("successfully delete output file")
         ...
 
     def zoey_post(self):
 
-        print('start zoey_post')
+        logging.info('start zoey_post')
 
         # ---------------------------
         # POST with orders_execution_post
         # ---------------------------
 
-        print('sum_discount_values,sum_food_values,avg_comission,gross_profit:')
-        print(self.sum_discount_values, self.sum_food_values, self.avg_comission, self.gross_profit)
+        logging.info('sum_discount_values,sum_food_values,avg_comission,gross_profit:')
+        logging.info(f'sum_discount_values: {self.sum_discount_values}, sum_food_values: {self.sum_food_values}, avg_commission: {self.avg_comission}, gross_profit: {self.gross_profit}')
 
         # Now we post request the robots output values
         post.post_request(sum_discount_values=self.sum_discount_values,
@@ -181,13 +181,13 @@ class Start:
     def zoey_process(self):
 
         self.zoey_orders()
-        print('successfully zoey orders')
+        logging.info('successfully zoey orders')
         # self.zoey_reports()
         self.zoey_file_handler()
-        print('successfully zoey file handler')
+        logging.info('successfully zoey file handler')
         self.zoey_post()
-        print('successfully zoey post')
-        print('successfully finished Zoey process')
+        logging.info('successfully zoey post')
+        logging.info('successfully finished Zoey process')
 
         ...
 

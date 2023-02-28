@@ -182,7 +182,7 @@ class TaskAutomator(Accesses):
 
         # get the execution time
         elapsed_time = et - st
-        print('Log out Tabalat execution time:', elapsed_time, 'seconds')
+        prilogging.info('Log out Tabalat execution time:', elapsed_time, 'seconds')
 
         self.tab_log = elapsed_time
 
@@ -217,13 +217,13 @@ class TaskAutomator(Accesses):
 
         # get the execution time
         elapsed_time = et - st
-        print('Extracting Reports in Tabalat execution time:', elapsed_time, 'seconds')
-        print(type(elapsed_time))
+        logging.info('Extracting Reports in Tabalat execution time:', elapsed_time, 'seconds')
+        logging.info(type(elapsed_time))
         self.tab_rep = elapsed_time
 
     def tab_time(self):
         time = self.tab_ord + self.tab_log + self.tab_rep
-        print("Total Tabalat excution time: {} seconds".format(time))
+        logging.info("Total Tabalat excution time: {} seconds".format(time))
 
     @staticmethod
     def talabat_close_page():
@@ -256,8 +256,8 @@ class TaskAutomator(Accesses):
 
         # get the execution time
         elapsed_time = et - st
-        print('Extracting Sales Per Menu Item \n in Tabalat execution time:', elapsed_time, 'seconds')
-        print(type(elapsed_time))
+        logging.info('Extracting Sales Per Menu Item \n in Tabalat execution time:', elapsed_time, 'seconds')
+        logging.info(type(elapsed_time))
         self.tab_rep = elapsed_time
 
     def talabat_sales_per_area(self):
@@ -273,8 +273,8 @@ class TaskAutomator(Accesses):
 
         # get the execution time
         elapsed_time = et - st
-        print('Extracting Sales by Area in Tabalat execution time:', elapsed_time, 'seconds')
-        print(type(elapsed_time))
+        logging.info('Extracting Sales by Area in Tabalat execution time:', elapsed_time, 'seconds')
+        logging.info(type(elapsed_time))
         self.tab_rep = elapsed_time
 
 
@@ -305,15 +305,15 @@ class HandlerSheet(TaskAutomator):
         for f_name in os.listdir(path):
             if f_name.startswith('popularDishes') and f_name.endswith('.xlsx'):
                 list_of_files.append(f_name)
-                print(list_of_files)
+                logging.info(list_of_files)
         latest_file = max(list_of_files, key=os.path.getctime)
 
-        print("popularDishes: ", latest_file)
+        logging.info("popularDishes: ", latest_file)
 
         # Create the PATH FOR THE order_per_day file
 
         self.popular_dishes = r"{}".format(str(latest_file))
-        print("popularDishes: ", self.popular_dishes)
+        logging.info("popularDishes: ", self.popular_dishes)
 
         # # Import your dataset (order_per_day), for example:
         self.wb_popular_dishes = openpyxl.load_workbook(self.popular_dishes, keep_vba=False, data_only=False)
@@ -337,7 +337,7 @@ class HandlerSheet(TaskAutomator):
             dish.append(row[0])
             total.append(row[1])
             sales.append(row[2])
-        # print('\ndish:', dish, '\ntotal:', total,  '\nsales:',  sales)
+        # logging.info('\ndish:', dish, '\ntotal:', total,  '\nsales:',  sales)
         return dish, total, sales
 
     def delete_output_file(self, filename):
@@ -347,9 +347,9 @@ class HandlerSheet(TaskAutomator):
 
         if os.path.exists(filepath):
             os.remove(filepath)
-            print(f"{filepath} deleted.")
+            logging.info(f"{filepath} deleted.")
         else:
-            print(f"{filepath} does not exist.")
+            logging.info(f"{filepath} does not exist.")
 
 
 
