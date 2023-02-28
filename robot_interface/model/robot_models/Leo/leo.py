@@ -138,10 +138,10 @@ class Start:
         print('successfully leo reports menu item')
 
         self.leo_file_handler()
-        # print('successfully leo file handler')
-        # self.leo_post()
-        # print('successfully leo post')
-        # print('successfully finished leo process')
+        print('successfully leo file handler')
+        self.leo_post()
+        print('successfully leo post')
+        print('successfully finished leo process')
 
         ...
 

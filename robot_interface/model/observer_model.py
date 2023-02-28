@@ -41,17 +41,6 @@ class Handler(watchdog.events.PatternMatchingEventHandler):
                 subprocess.Popen(['python', dist_robot_interface])
                 self.process_running = True  # Set flag to indicate that the process is running
 
-    # def on_deleted(self, event):
-    #     self.logger.info("Watchdog received deleted event - %s.", event.src_path)
-    #     if event.src_path == "file.csv":
-    #         # If the file that was deleted is the file we are monitoring, stop the process and set the flag to False
-    #         self.process_running = False
-    #         stop_process()
-    #
-    #     if event.src_path in self.file_processed:
-    #         # Remove the deleted file from the list of processed files
-    #         self.file_processed.remove(event.src_path)
-    #         self.logger.info("File deleted. Removed from processed list.")
 
     def on_deleted(self, event):
         self.logger.info("Watchdog received deleted event - %s.", event.src_path)
@@ -68,6 +57,7 @@ class Handler(watchdog.events.PatternMatchingEventHandler):
         self.logger.info("File deleted. Removed from processed list.")
         self.logger.info("File Processed: %s  ", self.file_processed)
         self.logger.info("Process Running Status: %s ", self.process_running)
+
 
 def start_observer(src_path):
     event_handler = Handler()

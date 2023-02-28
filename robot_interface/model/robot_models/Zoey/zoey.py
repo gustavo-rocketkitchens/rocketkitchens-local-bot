@@ -185,9 +185,9 @@ class Start:
         # self.zoey_reports()
         self.zoey_file_handler()
         print('successfully zoey file handler')
-        # self.zoey_post()
-        # print('successfully zoey post')
-        # print('successfully finished Zoey process')
+        self.zoey_post()
+        print('successfully zoey post')
+        print('successfully finished Zoey process')
 
         ...
 

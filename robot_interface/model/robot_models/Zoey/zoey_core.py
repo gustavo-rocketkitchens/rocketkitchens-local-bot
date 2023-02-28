@@ -538,6 +538,7 @@ class TaskAutomator(Accesses):
         # main task
 
         r.init(visual_automation=True)
+
         title = get_page_title("https://talabat.portal.restaurant/login?redirect=/")
         focus = "focus(title='{}')".format(title)
         maximize = "maximize (title='{}')".format(title)
