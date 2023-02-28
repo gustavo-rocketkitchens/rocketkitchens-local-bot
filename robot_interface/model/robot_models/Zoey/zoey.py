@@ -179,9 +179,9 @@ class Start:
                           sum_food_values=self.sum_food_values,
                           avg_comission=self.avg_comission,
                           gross_profit=self.gross_profit,
-                          dish=self.dish,
-                          total=self.total,
-                          sales=self.sales)
+                          dish=None,
+                          total=None,
+                          sales=None)
         ...
 
     def zoey_process(self):
