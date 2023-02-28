@@ -11,7 +11,7 @@ from robot_models.Sal import sal
 from robot_models.Leo import leo
 from robot_models.Zoey import zoey
 from robot_models import admin as ad
-from robot_models import tabalat_search
+import tabalat_search
 
 
 
