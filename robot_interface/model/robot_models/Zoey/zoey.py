@@ -39,6 +39,9 @@ class Start:
         self.avg_comission = None
         self.sum_food_values = None
         self.sum_discount_values = None
+        self.dish = None
+        self.total = None
+        self.sales = None
         logging.info("Initializers in Zoey")
         logging.info("Task Automator Class in Zoey")
         self.bot = TaskAutomator()
@@ -175,7 +178,10 @@ class Start:
         post.post_request(sum_discount_values=self.sum_discount_values,
                           sum_food_values=self.sum_food_values,
                           avg_comission=self.avg_comission,
-                          gross_profit=self.gross_profit)
+                          gross_profit=self.gross_profit,
+                          dish=self.dish,
+                          total=self.total,
+                          sales=self.sales)
         ...
 
     def zoey_process(self):
