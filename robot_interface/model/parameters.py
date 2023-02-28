@@ -44,3 +44,11 @@ class Parameters:
                     password = value
                     break
         return username, password
+
+    # def get_pass(self, variable_name):
+    #     variable_name, values = self.get_row(variable_name)
+    #     username = values[-2] if 'USER' in params.df.columns and isinstance(values[-2], str) else None
+    #     password = values[-1] if 'PASS' in params.df.columns and isinstance(values[-1], str) else None
+    #
+    #     return username, password
+    #

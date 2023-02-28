@@ -11,6 +11,7 @@ from robot_models.Sal import sal
 from robot_models.Leo import leo
 from robot_models.Zoey import zoey
 from robot_models import admin as ad
+from robot_models import tabalat_search
 
 
 
@@ -28,6 +29,8 @@ class RobotLauncher:
         self.exit_talabat = ''
         self.zoey = 'Zoey'
         self.leo = 'Leo'
+        self.leo_marketing_analysis = 'Leo-MarketingAnalysis'
+
         self.sal = 'Sal'
 
         #===============================================================
@@ -74,6 +77,8 @@ class RobotLauncher:
             case self.zoey:
                 self.bot_zoey().zoey_process()  # Start robot  with zoey parameters
             case self.leo:
+                self.bot_leo().leo_process()
+            case self.leo_marketing_analysis:
                 self.bot_leo().leo_process()
             case self.sal:
                 self.bot_sal().sal_process()

@@ -86,9 +86,9 @@ class TalabatSearch:
         self.tab_log = elapsed_time
 
 
-if __name__ == '__main__':
-    TS = TalabatSearch()
-    TS.talabat_search()
+# if __name__ == '__main__':
+#     # TS = TalabatSearch()
+#     # TS.talabat_search()
 
 
 
