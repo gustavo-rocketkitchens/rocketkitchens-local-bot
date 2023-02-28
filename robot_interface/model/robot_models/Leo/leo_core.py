@@ -182,7 +182,7 @@ class TaskAutomator(Accesses):
 
         # get the execution time
         elapsed_time = et - st
-        prilogging.info('Log out Tabalat execution time:', elapsed_time, 'seconds')
+        logging.info('Log out Tabalat execution time:', elapsed_time, 'seconds')
 
         self.tab_log = elapsed_time
 
