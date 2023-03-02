@@ -47,7 +47,7 @@ class URLParser:
 
 if __name__ == "__main__":
     parser = URLParser()
-    area_name = "dasman"
+    area_name = "Dasman"
     url = parser.get_area_url(area_name)
     if url:
         print(f"URL for {area_name}: {url}")

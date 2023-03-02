@@ -1,6 +1,7 @@
 from request_app import GetMenuItem
 import logging
 
+
 class MarketingAnalysis(GetMenuItem):
     def __init__(self):
         super().__init__()
@@ -23,6 +24,9 @@ class MarketingAnalysis(GetMenuItem):
 if __name__ == '__main__':
     mkt = MarketingAnalysis()
     # input_area = mkt.input_area('Al Hamidiya 2')
-    input_area = mkt.input_area('Al Abar')
+    # input_area = mkt.input_area('Al Abar')
+    # input_area = mkt.input_area('Al Bandar (Al Raha)')
+    # input_area = mkt.input_area('Al Humrah - A')
+    input_area = mkt.input_area('Business Bay')
     print(f"Restaurants in {input_area} for delivery")
     # print(input_area)

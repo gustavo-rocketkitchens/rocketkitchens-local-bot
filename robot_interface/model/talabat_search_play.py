@@ -1,35 +1,30 @@
-from playwright.sync_api import Playwright, sync_playwright
-import time
+from playwright.sync_api import Playwright, sync_playwright, expect
 
 
-class TalabatSearch:
-    def __init__(self):
-        self.url = "https://www.talabat.com/uae"
-
-    def talabat_search(self, query):
-        with sync_playwright() as p:
-            browser = p.chromium.launch(headless=False)
-            page = browser.new_page()
-            page.goto(self.url)
-            page.fill("//input[@id='search-box-map-first']", query)
-
-            # Wait for the drop-down menu to appear
-            page.wait_for_selector("(//div[@data-test='show-map-title'])[1]", state='visible')
-
-            # Click on the first option in the dropdown
-            page.click("(//div[@data-test='show-map-title'])[1]")
-
-
-            # Wait for the page to finish loading
-            page.wait_for_load_state(state='networkidle')
-
-            # Scroll to a specific element by selector
-            element = page.wait_for_selector("//div[@data-test='google-maps-component']")
-            page.scroll_to(element)
-
-            page.click("//button[@data-test='btn-deliver-here']")
+def run(playwright: Playwright) -> None:
+    browser = playwright.chromium.launch(headless=False)
+    context = browser.new_context()
+    page = context.new_page()
+    page.goto("https://www.talabat.com/uae/restaurants/1252/business-bay")
+    page.locator("[data-test=\"rest-search-box\"]").click()
+    page.locator("[data-test=\"rest-search-box\"]").press("CapsLock")
+    page.locator("[data-test=\"rest-search-box\"]").fill("S")
+    page.locator("[data-test=\"rest-search-box\"]").press("CapsLock")
+    page.locator("[data-test=\"rest-search-box\"]").fill("Sushi")
+    page.locator("[data-test=\"rest-search-box\"]").press("Enter")
+    page.get_by_role("link", name="Sushi Workshop, Bao & Katsu Sushi Workshop, Bao & Katsu Sushi, Japanese, Asian Very good Within 35 mins Delivery: 9.00 Min: 10.00 Talabat Discounts Discounts Live Tracking Contactless drop-off").click()
+    page.get_by_text("Build Your Own Katsu Curry").first.click()
+    page.get_by_role("img", name="Alert Close Button Image").click()
+    page.locator(".currency").first.click()
+    page.get_by_role("img", name="Alert Close Button Image").click()
+    page.get_by_text("Build your own Katsu curry! Select fresh rice, protein and toppings").first.click()
+    page.locator("div").filter(has_text="Your Choice Of:(Choose 1)").first.click()
+    page.get_by_role("img", name="Alert Close Button Image").click()
+    page.get_by_test_id()
+    # ---------------------
+    context.close()
+    browser.close()
 
 
-if __name__ == "__main__":
-    ts = TalabatSearch()
-    ts.talabat_search("Dubai Internet City - Dubai - United Arab Emirates")
+with sync_playwright() as playwright:
+    run(playwright)
