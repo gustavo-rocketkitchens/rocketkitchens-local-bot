@@ -1977,7 +1977,6 @@ class GetMenuItem:
                               'Zayed Sports City': None,
                               'Zubara': None}
 
-
     def create_dict(self):
         my_dict = {}
         for i in range(len(self.area)):

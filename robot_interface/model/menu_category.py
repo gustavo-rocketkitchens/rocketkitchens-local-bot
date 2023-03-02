@@ -6,6 +6,7 @@ from playwright.sync_api import Playwright, sync_playwright
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 
+
 def scrape_menu_items(url: str) -> dict:
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=False)
@@ -47,6 +48,7 @@ def scrape_menu_items(url: str) -> dict:
 
         return menu_items
 
+
 def write_menu_items_to_csv(menu_items: dict, filename: str):
     with open(filename, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
@@ -55,8 +57,9 @@ def write_menu_items_to_csv(menu_items: dict, filename: str):
             for item_name, item_price in category_items.items():
                 writer.writerow([category_name, item_name, item_price])
 
+
 if __name__ == '__main__':
     url = "https://www.talabat.com/uae/restaurant/619284/manzo-sushi-and-sliders-khalifa-city-madinat-khalifa--a?aid=2060"
     menu_items = scrape_menu_items(url)
     print(menu_items)
-    write_menu_items_to_csv(menu_items, 'menu_items.csv')
+    # write_menu_items_to_csv(menu_items, 'menu_items.csv')
