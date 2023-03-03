@@ -19,6 +19,7 @@ class MarketingAnalysis(GetMenuItem):
         self.menu = None
         self.dict_area = None
 
+    # Get the URL of the Area
     def input_area(self, area):
         logger.info(f"Getting the URL for {area}")
         self.menu = GetMenuItem()
@@ -28,7 +29,7 @@ class MarketingAnalysis(GetMenuItem):
         logger.info(f"The URL for {area} is: {url}")
         return url
 
-
+    # Get the restaurants by Cuisine
     def input_cuisine(self, cuisine, url):
         logger.info(f"Searching for {cuisine} in {url}")
         self.menu = GetMenuItem()
@@ -73,7 +74,39 @@ class MarketingAnalysis(GetMenuItem):
 
         return restaurants
 
-    def output_menu_item(self, url):
+    def output_restaurants_url(self, cuisine, url):
+        logger.info(f"Searching for restaurants URL'S in {url}")
+        self.menu = GetMenuItem()
+        self.all_cuisine = self.menu.all_cuisine
+        restaurants = {}
+
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=False)
+            page = browser.new_page()
+            page.goto(url)
+            time.sleep(.2)
+            logger.info(f"Opened the browser and navigated to {url}")
+            search_input = page.query_selector("//input[@placeholder='Search Restaurants']")
+            search_input.fill(cuisine)
+            time.sleep(.1)  # Wait for 2 seconds to ensure page is loaded
+            logger.info(f"Filled in the cuisine search input with {cuisine}")
+
+            restaurant_url = page.query_selector_all(".px-2.py-3.restuarant-item.d-block.b-t")
+            if restaurant_url:
+                restaurant_title = page.query_selector(".restaurant-title.pb-1")
+                restaurant_url = page.query_selector(".px-2.py-3.restuarant-item.d-block.b-t")
+                restaurant_details = {
+                    "Title": restaurant_title.inner_text(),
+                    "URL": restaurant_url.get_attribute("href")
+                }
+                restaurants[restaurant_title.inner_text()] = restaurant_details
+
+        logger.info(f"List of Restaurants URL's: {restaurants}")
+
+        return restaurants
+
+    # Write the Menu Items to the CSV file
+    def output_menu_item(self, cuisine, url):
         logger.info(f"Scraping menu items for {url}")
         menu_items = menu_category.scrape_menu_items(url)
         logger.info(f"Scraped {len(menu_items)} menu items")
@@ -87,8 +120,10 @@ if __name__ == '__main__':
     logger.info(f"Getting details for restaurants in {area} serving {cuisine} cuisine")
     url = mkt.input_area(area)
 
-    mkt.input_cuisine(cuisine, url)
-    logger.info(f"Finished retrieving restaurant details for {cuisine} cuisine in {url}")
+    # mkt.input_cuisine(cuisine, url)
+    # logger.info(f"Finished retrieving restaurant details for {cuisine} cuisine in {url}")
+    mkt.output_restaurants_url(cuisine, url)
+    logger.info(f"Finished retrieving restaurant URL's for {cuisine}")
     # mkt.output_menu_item(url)
     # logger.info("Completed scraping menu items and writing to CSV file.")
 
