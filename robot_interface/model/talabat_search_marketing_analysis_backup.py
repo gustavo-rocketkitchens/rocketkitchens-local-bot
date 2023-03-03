@@ -29,7 +29,10 @@ class MarketingAnalysis(GetMenuItem):
         logger.info(f"The URL for {area} is: {url}")
         return url
 
-    # Get the restaurants by Cuisine
+    # Get the restaurants Info by Cuisine
+    # Details for restaurant
+    # Title
+    # Ratings and new section
     def input_cuisine(self, cuisine, url):
         logger.info(f"Searching for {cuisine} in {url}")
         self.menu = GetMenuItem()
@@ -74,7 +77,9 @@ class MarketingAnalysis(GetMenuItem):
 
         return restaurants
 
-    # Get the restaurants by Cuisine
+    # Get the restaurants addresses by Cuisine
+    # Title
+    # URL
     def output_restaurants_url(self, cuisine, url):
         logger.info(f"Searching for restaurants URL'S in {url}")
         self.menu = GetMenuItem()
