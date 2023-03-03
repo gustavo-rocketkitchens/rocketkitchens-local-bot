@@ -103,7 +103,7 @@ class MarketingAnalysis(GetMenuItem):
                     restaurant_title = restaurant_url.query_selector(".restaurant-title.pb-1")
                     url = restaurant_url.get_attribute("href")
                     restaurant_details = {
-                        "Title": restaurant_title.inner_text(),
+                        # "Title": restaurant_title.inner_text(),
                         "URL": url
                     }
                     restaurants[restaurant_title.inner_text()] = restaurant_details
@@ -127,9 +127,9 @@ if __name__ == '__main__':
     logger.info(f"Getting details for restaurants in {area} serving {cuisine} cuisine")
     url = mkt.input_area(area)
 
-    mkt.input_cuisine(cuisine, url)
-    logger.info(f"Finished retrieving restaurant details for {cuisine} cuisine in {url}")
-    time.sleep(.5)
+    # mkt.input_cuisine(cuisine, url)
+    # logger.info(f"Finished retrieving restaurant details for {cuisine} cuisine in {url}")
+    # time.sleep(.5)
     mkt.output_restaurants_url(cuisine, url)
     logger.info(f"Finished retrieving restaurant URL's for {cuisine}")
     # mkt.output_menu_item(url)

@@ -78,8 +78,7 @@ class MarketingAnalysis(GetMenuItem):
         return restaurants
 
     # Get the restaurants addresses by Cuisine
-    # Title
-    # URL
+    # Title: URL
     def output_restaurants_url(self, cuisine, url):
         logger.info(f"Searching for restaurants URL'S in {url}")
         self.menu = GetMenuItem()
@@ -91,11 +90,12 @@ class MarketingAnalysis(GetMenuItem):
             page = browser.new_page()
             page.goto(url)
             time.sleep(.2)
-            logger.info(f"Opened the browser and navigated to {url}")
+            logger.info(f"\nOpened the browser and navigated to {url}")
+
             search_input = page.query_selector("//input[@placeholder='Search Restaurants']")
             search_input.fill(cuisine)
-            time.sleep(.1)  # Wait for 2 seconds to ensure page is loaded
-            logger.info(f"Filled in the cuisine search input with {cuisine}")
+            time.sleep(.1)
+            logger.info(f"\nFilled in the cuisine search input with {cuisine}")
 
             restaurant_urls = page.query_selector_all(".px-2.py-3.restuarant-item.d-block.b-t")
             if restaurant_urls:
@@ -108,7 +108,9 @@ class MarketingAnalysis(GetMenuItem):
                     }
                     restaurants[restaurant_title.inner_text()] = restaurant_details
 
-        logger.info(f"List of Restaurants URL's: {restaurants}")
+        logger.info(f"\nList of Restaurants URL's: \n")
+        for name, details in restaurants.items():
+            logger.info(f"{name}:\n {details}\n")
 
         return restaurants
 
