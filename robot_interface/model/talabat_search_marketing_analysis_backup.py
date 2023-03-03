@@ -30,50 +30,6 @@ class MarketingAnalysis(GetMenuItem):
         return url
 
     # Get the restaurants by Cuisine
-    def input_cuisine(self, cuisine, url):
-        logger.info(f"Searching for {cuisine} in {url}")
-        self.menu = GetMenuItem()
-        self.all_cuisine = self.menu.all_cuisine
-        restaurants = {}
-
-        with sync_playwright() as p:
-            browser = p.chromium.launch(headless=False)
-            page = browser.new_page()
-            page.goto(url)
-            time.sleep(5)
-            logger.info(f"Opened the browser and navigated to {url}")
-            search_input = page.query_selector("//input[@placeholder='Search Restaurants']")
-            search_input.fill(cuisine)
-            time.sleep(2)  # Wait for 2 seconds to ensure page is loaded
-            logger.info(f"Filled in the cuisine search input with {cuisine}")
-
-
-            restaurant_list = page.query_selector_all("//div[@class='d-flex']")
-            for index, restaurant in enumerate(restaurant_list):
-                restaurant_title = restaurant.query_selector(".restaurant-title.pb-1")
-                cuisines_section = restaurant.query_selector(".cuisines-section.pb-1.truncate")
-                ratings_section = restaurant.query_selector(".ratings-and-new-section.pb-1.d-flex")
-                info_section = restaurant.query_selector(".info-section.pb-1.f-14.delivery-info.d-flex")
-                tlb_badge_section = restaurant.query_selector(
-                    ".tlb-badge-section.d-flex.align-items-center.flex-wrap")
-                logger.info(f"Details for restaurant {index + 1}:")
-                logger.info(f"Title: {restaurant_title.inner_text()}")
-                logger.info(f"Cuisine: {cuisines_section.inner_text()}")
-                logger.info(f"Ratings and new section: {ratings_section.inner_text()}")
-                logger.info(f"Info section: {info_section.inner_text()}")
-                logger.info(f"TLB badge section: {tlb_badge_section.inner_text()}")
-                restaurant_details = {
-                    "Title": restaurant_title.inner_text(),
-                    "Cuisine": cuisines_section.inner_text(),
-                    "Ratings and new section": ratings_section.inner_text(),
-                    "Info section": info_section.inner_text(),
-                    "TLB badge section": tlb_badge_section.inner_text()
-                }
-                restaurants[restaurant_title.inner_text()] = restaurant_details
-
-
-        return restaurants
-
     def output_restaurants_url(self, cuisine, url):
         logger.info(f"Searching for restaurants URL'S in {url}")
         self.menu = GetMenuItem()
@@ -91,15 +47,16 @@ class MarketingAnalysis(GetMenuItem):
             time.sleep(.1)  # Wait for 2 seconds to ensure page is loaded
             logger.info(f"Filled in the cuisine search input with {cuisine}")
 
-            restaurant_url = page.query_selector_all(".px-2.py-3.restuarant-item.d-block.b-t")
-            if restaurant_url:
-                restaurant_title = page.query_selector(".restaurant-title.pb-1")
-                restaurant_url = page.query_selector(".px-2.py-3.restuarant-item.d-block.b-t")
-                restaurant_details = {
-                    "Title": restaurant_title.inner_text(),
-                    "URL": restaurant_url.get_attribute("href")
-                }
-                restaurants[restaurant_title.inner_text()] = restaurant_details
+            restaurant_urls = page.query_selector_all(".px-2.py-3.restuarant-item.d-block.b-t")
+            if restaurant_urls:
+                for restaurant_url in restaurant_urls:
+                    restaurant_title = restaurant_url.query_selector(".restaurant-title.pb-1")
+                    url = restaurant_url.get_attribute("href")
+                    restaurant_details = {
+                        "Title": restaurant_title.inner_text(),
+                        "URL": url
+                    }
+                    restaurants[restaurant_title.inner_text()] = restaurant_details
 
         logger.info(f"List of Restaurants URL's: {restaurants}")
 
