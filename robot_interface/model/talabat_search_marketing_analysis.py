@@ -112,6 +112,20 @@ class MarketingAnalysis(GetMenuItem):
 
         return restaurants
 
+    def get_menu_categories(self, restaurants):
+
+        self.all_menu_items = []
+        for restaurant in restaurants.values():
+            # Title: Url
+            logger.info(f"Entering {restaurant['URL']}")
+            url = "https://www.talabat.com" + restaurant['URL']
+            menu_items = menu_category.scrape_menu_items(url)
+            logger.info(f"Menu Items Extracted for {restaurant['URL']}")
+            logger.info(f"{menu_items}")
+            self.all_menu_items.extend(menu_items)
+
+        return self.all_menu_items
+
     # Write the Menu Items to the CSV file
     def output_menu_item(self, cuisine, url):
         logger.info(f"Scraping menu items for {url}")
@@ -123,15 +137,20 @@ class MarketingAnalysis(GetMenuItem):
 if __name__ == '__main__':
     mkt = MarketingAnalysis()
     area = 'Business Bay'
-    cuisine = 'Italian'
+    cuisine = 'Sushi'
     logger.info(f"Getting details for restaurants in {area} serving {cuisine} cuisine")
     url = mkt.input_area(area)
 
     # mkt.input_cuisine(cuisine, url)
     # logger.info(f"Finished retrieving restaurant details for {cuisine} cuisine in {url}")
     # time.sleep(.5)
-    mkt.output_restaurants_url(cuisine, url)
+    restaurants = mkt.output_restaurants_url(cuisine, url)
     logger.info(f"Finished retrieving restaurant URL's for {cuisine}")
+
+    time.sleep(.5)
+    logger.info(f"Getting Menu Category Info for restaurants in {area} serving {cuisine} cuisine")
+    mkt.get_menu_categories(restaurants)
+
     # mkt.output_menu_item(url)
     # logger.info("Completed scraping menu items and writing to CSV file.")
 

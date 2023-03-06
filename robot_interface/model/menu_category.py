@@ -58,8 +58,8 @@ def write_menu_items_to_csv(menu_items: dict, filename: str):
                 writer.writerow([category_name, item_name, item_price])
 
 
-if __name__ == '__main__':
-    url = "https://www.talabat.com/uae/restaurant/619284/manzo-sushi-and-sliders-khalifa-city-madinat-khalifa--a?aid=2060"
-    menu_items = scrape_menu_items(url)
-    print(menu_items)
-    # write_menu_items_to_csv(menu_items, 'menu_items.csv')
+# if __name__ == '__main__':
+#     url = "https://www.talabat.com/uae/restaurant/619284/manzo-sushi-and-sliders-khalifa-city-madinat-khalifa--a?aid=2060"
+#     menu_items = scrape_menu_items(url)
+#     print(menu_items)
+#     # write_menu_items_to_csv(menu_items, 'menu_items.csv')
