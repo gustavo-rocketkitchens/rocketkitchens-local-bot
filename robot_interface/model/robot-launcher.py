@@ -8,7 +8,8 @@ import os
 #  To run in Pyinstaller
 from parameters import Parameters
 from robot_models.Sal import sal
-from robot_models.Leo import leo, marketing_analysis
+from robot_models.Leo import leo
+from robot_models.Leo import marketing_analysis
 from robot_models.Zoey import zoey
 from robot_models import admin as ad
 import tabalat_search

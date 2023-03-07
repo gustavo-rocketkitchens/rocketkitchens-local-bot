@@ -43,11 +43,11 @@ class MarketingAnalysis(GetMenuItem):
             browser = p.chromium.launch(headless=False)
             page = browser.new_page()
             page.goto(url)
-            time.sleep(5)
+            time.sleep(.5)
             logger.info(f"Opened the browser and navigated to {url}")
             search_input = page.query_selector("//input[@placeholder='Search Restaurants']")
             search_input.fill(cuisine)
-            time.sleep(2)  # Wait for 2 seconds to ensure page is loaded
+            time.sleep(.2)  # Wait for 2 seconds to ensure page is loaded
             logger.info(f"Filled in the cuisine search input with {cuisine}")
 
 
@@ -134,23 +134,23 @@ class MarketingAnalysis(GetMenuItem):
         menu_category.write_menu_items_to_csv(menu_items, 'menu_items.csv')
 
 
-if __name__ == '__main__':
-    mkt = MarketingAnalysis()
-    area = 'Business Bay'
-    cuisine = 'Pizza'
-    logger.info(f"Getting details for restaurants in {area} serving {cuisine} cuisine")
-    url = mkt.input_area(area)
-
-    mkt.input_cuisine(cuisine, url)
-    logger.info(f"Finished retrieving restaurant details for {cuisine} cuisine in {url}")
-    # # time.sleep(10)
-    restaurants = mkt.output_restaurants_url(cuisine, url)
-    logger.info(f"Finished retrieving restaurant URL's for {cuisine}")
-    # #
-    # time.sleep(2)
-    logger.info(f"Getting Menu Category Info for restaurants in {area} serving {cuisine} cuisine")
-    mkt.get_menu_categories(restaurants)
-    #
-    # mkt.output_menu_item(url)
-    # logger.info("Completed scraping menu items and writing to CSV file.")
-    #
+# if __name__ == '__main__':
+#     mkt = MarketingAnalysis()
+#     area = 'Business Bay'
+#     cuisine = 'Pizza'
+#     logger.info(f"Getting details for restaurants in {area} serving {cuisine} cuisine")
+#     url = mkt.input_area(area)
+#
+#     mkt.input_cuisine(cuisine, url)
+#     logger.info(f"Finished retrieving restaurant details for {cuisine} cuisine in {url}")
+#     # # time.sleep(10)
+#     restaurants = mkt.output_restaurants_url(cuisine, url)
+#     logger.info(f"Finished retrieving restaurant URL's for {cuisine}")
+#     # #
+#     # time.sleep(2)
+#     logger.info(f"Getting Menu Category Info for restaurants in {area} serving {cuisine} cuisine")
+#     mkt.get_menu_categories(restaurants)
+#     #
+#     # mkt.output_menu_item(url)
+#     # logger.info("Completed scraping menu items and writing to CSV file.")
+#     #

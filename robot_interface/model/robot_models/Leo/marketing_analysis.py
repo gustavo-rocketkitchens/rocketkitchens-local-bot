@@ -14,7 +14,8 @@ from robot_models.Leo.leo_core import TaskAutomator, HandlerSheet
 # Local Bot
 from robot_models import orders_execution_post as post
 from parameters import Parameters
-
+from talabat_search_marketing_analysis import MarketingAnalysis
+from request_app import GetMenuItem
 # =======================================================================================================================
 
 # Felicidade PC
@@ -47,57 +48,29 @@ class Start:
         self.bot = TaskAutomator()
         self.handler = HandlerSheet()
 
-    def get_parameters(self):
-        src_path = os.path.join(os.path.expanduser("~"), "Downloads", "output")
-
-        filename = 'File.csv'
-        filepath = os.path.join(src_path, filename)
-        params = Parameters(filepath)
-
-        # Get the first row of the dataframe
-        row = params.df.iloc[0]
-
-        # Extract the first value in the first cell of the row
-        parameter = row.iloc[0]
-
-        # Get the row for the extracted parameter
-        self.variable_name, values = params.get_row(parameter)
-
-        # Print the variable name and values to verify that they have been assigned correctly
-        logging.info(f'robot-launcher function name: {self.variable_name} \n in zoey.py')
-        logging.info(f'Variable name: {self.variable_name}')
-        logging.info(f'Values: {values}')
-
-        self.username, self.password = params.get_pass(self.variable_name)
-
-        # Print the username and password to verify that they have been assigned correctly
-        logging.info(f'Username: {self.username}')
-        logging.info(f'Password: {self.password}')
-        return self.username, self.password
 
     def leo_marketing_analysis(self):
+        self.mkt = MarketingAnalysis()
+        self.area = 'Business Bay'
+        self.cuisine = 'Pizza'
+        logger.info(f"Getting details for restaurants in {self.area} serving {self.cuisine} cuisine")
+        self.url = self.mkt.input_area(self.area)
 
+        self.mkt.input_cuisine(self.cuisine, self.url)
+        logger.info(f"Finished retrieving restaurant details for {self.cuisine} cuisine in {self.url}")
+        # # time.sleep(10)
+        restaurants = self.mkt.output_restaurants_url(self.cuisine, self.url)
+        logger.info(f"Finished retrieving restaurant URL's for {self.cuisine}")
+        # #
+        # time.sleep(2)
+        logger.info(f"Getting Menu Category Info for restaurants in {self.area} serving {self.cuisine} cuisine")
+        self.mkt.get_menu_categories(restaurants)
+        #
+        # mkt.output_menu_item(url)
+        # logger.info("Completed scraping menu items and writing to CSV file.")
+        #
 
         ...
-
-    def leo_reports_menu_item(self):
-        # =======================================
-        #     Leo   execution: Report 1 (items analysis)
-        # You get the report from Talabat > reports > sales per menu items
-        # =======================================
-        #
-        logging.info("leo_reports_menu_item instance: \n self.username, self.password = self.get_parameters() ")
-        self.username, self.password = self.get_parameters()
-        self.bot.enter_talabat(username=self.username, password=self.password)
-        r.wait(12)
-        self.bot.talabat_sales_per_menu_item()
-        # r.wait(4)
-        # self.bot.talabat_sales_per_area()
-        r.wait(4)
-        self.bot.exit_talabat()
-        r.wait(2)
-        self.bot.talabat_close_page()
-        self.bot.tab_time()
 
     def leo_file_handler(self):
 
@@ -139,14 +112,14 @@ class Start:
 
     def leo_process(self):
 
-        self.leo_reports_menu_item()
-        logging.info('successfully leo reports menu item')
+        self.leo_marketing_analysis()
+        logging.info('successfully Marketing Analysis Extraction')
 
-        self.leo_file_handler()
-        logging.info('successfully leo file handler')
-        self.leo_post()
-        logging.info('successfully leo post')
-        logging.info('successfully finished leo process')
+        # self.leo_file_handler()
+        # logging.info('successfully leo file handler')
+        # self.leo_post()
+        # logging.info('successfully leo post')
+        logging.info('successfully finished Marketing Analysis process')
 
         ...
 
