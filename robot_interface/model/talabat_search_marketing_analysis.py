@@ -51,29 +51,29 @@ class MarketingAnalysis(GetMenuItem):
             logger.info(f"Filled in the cuisine search input with {cuisine}")
 
 
-            restaurant_list = page.query_selector_all("//div[@class='d-flex']")
+            restaurant_list = page.query_selector_all("//div[@class='vendor-card']")
             for index, restaurant in enumerate(restaurant_list):
-                restaurant_title = restaurant.query_selector(".restaurant-title.pb-1")
-                cuisines_section = restaurant.query_selector(".cuisines-section.pb-1.truncate")
-                ratings_section = restaurant.query_selector(".ratings-and-new-section.pb-1.d-flex")
-                info_section = restaurant.query_selector(".info-section.pb-1.f-14.delivery-info.d-flex")
-                tlb_badge_section = restaurant.query_selector(
-                    ".tlb-badge-section.d-flex.align-items-center.flex-wrap")
+                restaurant_title = restaurant.query_selector(".content")
+                # cuisines_section = restaurant.query_selector(".cuisines-section.pb-1.truncate")
+                # ratings_section = restaurant.query_selector(".ratings-and-new-section.pb-1.d-flex")
+                # info_section = restaurant.query_selector(".info-section.pb-1.f-14.delivery-info.d-flex")
+                # tlb_badge_section = restaurant.query_selector(
+                #     ".tlb-badge-section.d-flex.align-items-center.flex-wrap")
                 logger.info(f"Details for restaurant {index + 1}:")
                 logger.info(f"Title: {restaurant_title.inner_text()}")
-                logger.info(f"Cuisine: {cuisines_section.inner_text()}")
-                logger.info(f"Ratings and new section: {ratings_section.inner_text()}")
-                logger.info(f"Info section: {info_section.inner_text()}")
-                logger.info(f"TLB badge section: {tlb_badge_section.inner_text()}")
+                # logger.info(f"Cuisine: {cuisines_section.inner_text()}")
+                # logger.info(f"Ratings and new section: {ratings_section.inner_text()}")
+                # logger.info(f"Info section: {info_section.inner_text()}")
+                # logger.info(f"TLB badge section: {tlb_badge_section.inner_text()}")
                 restaurant_details = {
                     "Title": restaurant_title.inner_text(),
-                    "Cuisine": cuisines_section.inner_text(),
-                    "Ratings and new section": ratings_section.inner_text(),
-                    "Info section": info_section.inner_text(),
-                    "TLB badge section": tlb_badge_section.inner_text()
+                    # "Cuisine": cuisines_section.inner_text(),
+                    # "Ratings and new section": ratings_section.inner_text(),
+                    # "Info section": info_section.inner_text(),
+                    # "TLB badge section": tlb_badge_section.inner_text()
                 }
                 restaurants[restaurant_title.inner_text()] = restaurant_details
-
+                time.sleep(2)
 
         return restaurants
 
@@ -94,13 +94,13 @@ class MarketingAnalysis(GetMenuItem):
             logger.info(f"Opened the browser and navigated to {url}")
             search_input = page.query_selector("//input[@placeholder='Search Restaurants']")
             search_input.fill(cuisine)
-            time.sleep(.1)  # Wait for 2 seconds to ensure page is loaded
+            time.sleep(2)  # Wait for 2 seconds to ensure page is loaded
             logger.info(f"Filled in the cuisine search input with {cuisine}")
 
-            restaurant_urls = page.query_selector_all(".px-2.py-3.restuarant-item.d-block.b-t")
+            restaurant_urls = page.query_selector_all("//a[@data-test='restaurant-a']")
             if restaurant_urls:
                 for restaurant_url in restaurant_urls:
-                    restaurant_title = restaurant_url.query_selector(".restaurant-title.pb-1")
+                    restaurant_title = restaurant_url.query_selector(".content")
                     url = restaurant_url.get_attribute("href")
                     restaurant_details = {
                         # "Title": restaurant_title.inner_text(),
@@ -137,20 +137,20 @@ class MarketingAnalysis(GetMenuItem):
 if __name__ == '__main__':
     mkt = MarketingAnalysis()
     area = 'Business Bay'
-    cuisine = 'Sushi'
+    cuisine = 'Pizza'
     logger.info(f"Getting details for restaurants in {area} serving {cuisine} cuisine")
     url = mkt.input_area(area)
 
-    # mkt.input_cuisine(cuisine, url)
-    # logger.info(f"Finished retrieving restaurant details for {cuisine} cuisine in {url}")
-    # time.sleep(.5)
+    mkt.input_cuisine(cuisine, url)
+    logger.info(f"Finished retrieving restaurant details for {cuisine} cuisine in {url}")
+    # # time.sleep(10)
     restaurants = mkt.output_restaurants_url(cuisine, url)
     logger.info(f"Finished retrieving restaurant URL's for {cuisine}")
-
-    time.sleep(.5)
+    # #
+    # time.sleep(2)
     logger.info(f"Getting Menu Category Info for restaurants in {area} serving {cuisine} cuisine")
     mkt.get_menu_categories(restaurants)
-
+    #
     # mkt.output_menu_item(url)
     # logger.info("Completed scraping menu items and writing to CSV file.")
-
+    #

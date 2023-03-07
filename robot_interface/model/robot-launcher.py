@@ -8,7 +8,7 @@ import os
 #  To run in Pyinstaller
 from parameters import Parameters
 from robot_models.Sal import sal
-from robot_models.Leo import leo
+from robot_models.Leo import leo, marketing_analysis
 from robot_models.Zoey import zoey
 from robot_models import admin as ad
 import tabalat_search
@@ -45,6 +45,11 @@ class RobotLauncher:
 
         self.bot_leo = leo.Start  # Instantiate but not start
 
+
+        # Leo Marketing Analysis
+
+        self.bot_leo_mkt = marketing_analysis.Start  # Instantiate but not start
+
         # Sal
 
         self.bot_sal = sal.Start  # Instantiate but not start
@@ -79,7 +84,7 @@ class RobotLauncher:
             case self.leo:
                 self.bot_leo().leo_process()
             case self.leo_marketing_analysis:
-                self.bot_leo().leo_process()
+                self.bot_leo_mkt().leo_process()
             case self.sal:
                 self.bot_sal().sal_process()
             case _:
