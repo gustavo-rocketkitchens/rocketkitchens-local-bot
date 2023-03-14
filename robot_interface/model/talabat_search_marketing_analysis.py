@@ -3,6 +3,11 @@ import menu_category
 import logging
 from playwright.sync_api import sync_playwright
 import time
+import csv
+import re
+import pandas as pd
+import openpyxl
+
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -100,57 +105,124 @@ class MarketingAnalysis(GetMenuItem):
             restaurant_urls = page.query_selector_all("//a[@data-test='restaurant-a']")
             if restaurant_urls:
                 for restaurant_url in restaurant_urls:
-                    restaurant_title = restaurant_url.query_selector(".content")
+                    restaurant_title = restaurant_url.query_selector(".content h2")
                     url = restaurant_url.get_attribute("href")
                     restaurant_details = {
-                        # "Title": restaurant_title.inner_text(),
+                        "Title": restaurant_title.inner_text(),
                         "URL": url
                     }
+                    logger.info(f"restaurant_details: {url}")
+                    logger.info(f"Title: {restaurant_title}")
                     restaurants[restaurant_title.inner_text()] = restaurant_details
 
-        logger.info(f"List of Restaurants URL's: {restaurants}")
+        # logger.info(f"List of Restaurants URL's: {restaurants}")
 
         return restaurants
 
-    def get_menu_categories(self, restaurants):
+    # def get_menu_categories(self, restaurants, cuisine, quantity=None, output_file='menu.txt'):
+    #     self.menu_items = {}
+    #     self.result_dict = {}
+    #     self.menu_list = []
+    #
+    #     num = 0
+    #
+    #     for restaurant in restaurants.values():
+    #         # Title: Url
+    #         logger.info(f"Entering {restaurant}")
+    #         url = "https://www.talabat.com" + restaurant['URL']
+    #         self.menu_items = menu_category.scrape_menu_items(url, cuisine)
+    #         time.sleep(0.1)
+    #         logger.info(f"Menu Items Extracted for {cuisine} in {restaurant['URL']}")
+    #         num += 1
+    #         if quantity and num == quantity:
+    #             break
+    #         logger.info(f"Apendding {num}: Menu Items = {self.menu_items}")
+    #         self.menu_list.append(restaurant)
+    #         self.menu_list.append(self.menu_items)
+    #
+    #     print(f"List of dicts is {self.menu_list}")
+    #
+    #     # Write to file
+    #     with open(output_file, 'w', encoding='utf-8') as file:
+    #         for item in self.menu_list:
+    #             for key, value in item.items():
+    #                 file.write(f"{key}: {value}\n")
+    #             file.write('\n')
+    #
+    #     logger.info(f"List of dicts written to {output_file}")
 
-        self.all_menu_items = []
+
+    def get_menu_categories(self, restaurants, cuisine, quantity=None, output_file='menu.xlsx'):
+        menu_list = []
+
+        num = 0
+
         for restaurant in restaurants.values():
-            # Title: Url
-            logger.info(f"Entering {restaurant['URL']}")
+            if quantity and num == quantity:
+                break
+
             url = "https://www.talabat.com" + restaurant['URL']
-            menu_items = menu_category.scrape_menu_items(url)
-            logger.info(f"Menu Items Extracted for {restaurant['URL']}")
-            logger.info(f"{menu_items}")
-            self.all_menu_items.extend(menu_items)
+            menu_items = menu_category.scrape_menu_items(url, cuisine)
+            menu_dict = {'Title': restaurant['Title'], 'URL': url}
 
-        return self.all_menu_items
+            for key, value in menu_items.items():
+                menu_item_dict = {}
 
-    # Write the Menu Items to the CSV file
-    def output_menu_item(self, cuisine, url):
-        logger.info(f"Scraping menu items for {url}")
-        menu_items = menu_category.scrape_menu_items(url)
-        logger.info(f"Scraped {len(menu_items)} menu items")
-        menu_category.write_menu_items_to_csv(menu_items, 'menu_items.csv')
+                for item in value:
+                    menu_item_dict['name'] = item['name']
+                    menu_item_dict['description'] = item['description']
+                    menu_item_dict['price'] = item['price']
+                    menu_dict[key] = [menu_item_dict]
+
+            menu_list.append(menu_dict)
+            num += 1
+
+        # Create a new workbook and worksheet
+        wb = openpyxl.Workbook()
+        ws = wb.active
+
+        # Write header row
+        ws.append(['Restaurant Title', 'URL', 'Food Name', 'Description', 'Price'])
+
+        # Iterate over the menu items and write them to the worksheet
+        row_num = 2
+        for item in menu_list:
+            # Write the restaurant title and URL to the worksheet
+            ws.cell(row=row_num, column=1, value=item['Title'])
+            ws.cell(row=row_num, column=2, value=item['URL'])
+
+            # Iterate over the menu items and write them to the worksheet
+            for key, value in item.items():
+                if key not in ['Title', 'URL']:
+                    for menu_item in value:
+                        ws.cell(row=row_num, column=3, value=menu_item['name'])
+                        ws.cell(row=row_num, column=4, value=menu_item['description'])
+                        ws.cell(row=row_num, column=5, value=menu_item['price'])
+                        row_num += 1
+
+        output_file = 'menu_' + cuisine + '_in_' + area + '.xlsx'
+        # Save the workbook
+        wb.save(output_file)
 
 
-# if __name__ == '__main__':
-#     mkt = MarketingAnalysis()
-#     area = 'Business Bay'
-#     cuisine = 'Pizza'
-#     logger.info(f"Getting details for restaurants in {area} serving {cuisine} cuisine")
-#     url = mkt.input_area(area)
-#
-#     mkt.input_cuisine(cuisine, url)
-#     logger.info(f"Finished retrieving restaurant details for {cuisine} cuisine in {url}")
-#     # # time.sleep(10)
-#     restaurants = mkt.output_restaurants_url(cuisine, url)
-#     logger.info(f"Finished retrieving restaurant URL's for {cuisine}")
-#     # #
-#     # time.sleep(2)
-#     logger.info(f"Getting Menu Category Info for restaurants in {area} serving {cuisine} cuisine")
-#     mkt.get_menu_categories(restaurants)
-#     #
-#     # mkt.output_menu_item(url)
-#     # logger.info("Completed scraping menu items and writing to CSV file.")
-#     #
+if __name__ == '__main__':
+    mkt = MarketingAnalysis()
+    # area = 'Business Bay'
+    area = 'Dubai Motor City'
+    cuisine = 'Sushi'
+    # logger.info(f"Getting details for restaurants in {area} serving {cuisine} cuisine")
+    url = mkt.input_area(area)
+
+    mkt.input_cuisine(cuisine, url)
+    logger.info(f"Finished retrieving restaurant details for {cuisine} cuisine in {url}")
+    # time.sleep(10)
+    restaurants = mkt.output_restaurants_url(cuisine, url)
+    logger.info(f"Finished retrieving restaurant URL's for {cuisine}")
+    # #
+    # logger.info(f"Getting Menu Category Info for restaurants in {area} serving {cuisine} cuisine")
+    mkt.get_menu_categories(restaurants=restaurants, cuisine=cuisine, quantity=1)
+    time.sleep(.2)
+
+    # logger.info(f"Getting and Saving Menu Category Info for restaurants in {area} serving {cuisine} cuisine")
+    # time.sleep(2)
+

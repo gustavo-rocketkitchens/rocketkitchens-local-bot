@@ -1372,7 +1372,9 @@ class GetMenuItem:
                            '/uae/restaurants/1170/academic-city',
                            '/uae/restaurants/1171/al-awir',
                            '/uae/restaurants/1172/al-badaa',
-                           '/uae/restaurants/1173/al-baraha']
+                           '/uae/restaurants/1173/al-baraha',
+                           '/uae/restaurants/1587/university-of-sharjah']
+
         self.urls_per_area = {'Abu Dhabi Gate City': None,
                               'Abu Dhabi Hills': None,
                               'Abu Dhabi International Airport': None,
@@ -1760,7 +1762,7 @@ class GetMenuItem:
                               'Dubai Marina': None,
                               'Dubai Maritime City': None,
                               'Dubai Media City': None,
-                              'Dubai Motor City': None,
+                              'Dubai Motor City': '/uae/restaurants/1276/dubai-motor-city',
                               'Dubai Outlet Mall': None,
                               'Dubai Silicon Oasis': None,
                               'Dubai Sports City': None,
@@ -1961,7 +1963,7 @@ class GetMenuItem:
                               'Umm Suqeim 2': None,
                               'Umm Suqeim 3': None,
                               'Universal Exposition': None,
-                              'University of Sharjah': None,
+                              'University of Sharjah': '/uae/restaurants/1587/university-of-sharjah',
                               'Wadi Alamardi': None,
                               'Wadi Ammar': None,
                               'Wadi Sham': None,

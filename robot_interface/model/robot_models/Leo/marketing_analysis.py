@@ -1,5 +1,4 @@
 import os
-
 import rpa as r
 import json
 import requests
@@ -126,7 +125,10 @@ class Start:
         # logging.info('successfully leo post')
         logging.info('successfully finished Marketing Analysis process')
 
-        ...
+        self.handler.delete_output_file("File.csv")
+        logging.info("successfully delete output file")
+
+
 
 # if __name__ == '__main__':
 #     start = Start()

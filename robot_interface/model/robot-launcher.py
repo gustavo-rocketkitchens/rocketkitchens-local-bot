@@ -1,3 +1,4 @@
+
 import os
 
 # #  To run With Script
@@ -82,12 +83,16 @@ class RobotLauncher:
 
             case self.zoey:
                 self.bot_zoey().zoey_process()  # Start robot  with zoey parameters
+
             case self.leo:
                 self.bot_leo().leo_process()
+
             case self.leo_marketing_analysis:
                 self.bot_leo_mkt().leo_process()
+
             case self.sal:
                 self.bot_sal().sal_process()
+
             case _:
                 print("Invalid variable name")
 
