@@ -209,6 +209,7 @@ if __name__ == '__main__':
     mkt = MarketingAnalysis()
     # area = 'Business Bay'
     area = 'Dubai Motor City'
+    # area = 'University of Sharjah'
     cuisine = 'Sushi'
     # logger.info(f"Getting details for restaurants in {area} serving {cuisine} cuisine")
     url = mkt.input_area(area)
@@ -220,7 +221,7 @@ if __name__ == '__main__':
     logger.info(f"Finished retrieving restaurant URL's for {cuisine}")
     # #
     # logger.info(f"Getting Menu Category Info for restaurants in {area} serving {cuisine} cuisine")
-    mkt.get_menu_categories(restaurants=restaurants, cuisine=cuisine, quantity=1)
+    mkt.get_menu_categories(restaurants=restaurants, cuisine=cuisine, quantity=15)
     time.sleep(.2)
 
     # logger.info(f"Getting and Saving Menu Category Info for restaurants in {area} serving {cuisine} cuisine")
