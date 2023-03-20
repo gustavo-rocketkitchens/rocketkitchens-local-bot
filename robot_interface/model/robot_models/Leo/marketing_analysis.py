@@ -92,6 +92,7 @@ class Start:
         self.handler.delete_output_file("File.csv")
         logging.info("successfully delete output file")
 
+    # Insert to the database
     def leo_post(self):
 
         logging.info('start leo post')

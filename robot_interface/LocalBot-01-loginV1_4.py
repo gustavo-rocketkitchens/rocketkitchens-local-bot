@@ -44,6 +44,8 @@ class LoginScreen(MDScreen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
+
+    # Insert to the database
     def login(self, instance):
         global username
         global password

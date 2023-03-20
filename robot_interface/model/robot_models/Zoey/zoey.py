@@ -163,6 +163,7 @@ class Start:
         logging.info("successfully delete output file")
         ...
 
+    # Insert to the database
     def zoey_post(self):
 
         logging.info('start zoey_post')

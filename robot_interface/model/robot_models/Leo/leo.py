@@ -1,11 +1,10 @@
 import os
-
 import rpa as r
 import json
 import requests
 import logging
+import time
 # from leo_core import TaskAutomator, HandlerSheet
-from robot_models.Leo.leo_core import TaskAutomator, HandlerSheet
 
 # from rocket_kitchens.Admin import orders_execution_post
 
@@ -14,12 +13,20 @@ from robot_models.Leo.leo_core import TaskAutomator, HandlerSheet
 # Local Bot
 from robot_models import orders_execution_post as post
 from parameters import Parameters
+from robot_models.Leo.leo_core import TaskAutomator, HandlerSheet
+
+# Database
+
+import client_robots
+
+
 
 # =======================================================================================================================
 
 # Felicidade PC
 # from rocket_kitchens_local_bot.robot_interface.model.robot_models  import orders_execution_post as post
 # from rocket_kitchens_local_bot.robot_interface.model.parameters import Parameters
+# from rocket_kitchens_local_bot.robot_interface.model.robot_models.Leo.leo_core import TaskAutomator, HandlerSheet
 
 # =======================================================================================================================
 
@@ -110,6 +117,7 @@ class Start:
         self.handler.delete_output_file("File.csv")
         logging.info("successfully delete output file")
 
+    # Insert to the database
     def leo_post(self):
 
         logging.info('start leo post')
@@ -132,15 +140,33 @@ class Start:
                           )
         ...
 
+    def leo_post_sql(self):
+
+        logging.info('start leo post')
+
+        logging.info("%s %s %s", self.dish, self.total, self.sales)
+
+        try:
+            # Establish a connection with the database
+            # Insert to the database with the parameters self.dish, self.total, self.sales
+            client_robots.insert(self.dish, self.total, self.sales)
+            logging.info('successfully inserted data into the database')
+
+        except Exception as e:
+            logging.error(f'Error while inserting data into the database: {str(e)}')
+
     def leo_process(self):
 
-        self.leo_reports_menu_item()
+        # self.leo_reports_menu_item()
         logging.info('successfully leo reports menu item')
 
         self.leo_file_handler()
         logging.info('successfully leo file handler')
-        self.leo_post()
+        # self.leo_post()
         logging.info('successfully leo post')
+        time.sleep(1)
+        self.leo_post_sql()
+        logging.info('successfully leo post in postgres')
         logging.info('successfully finished leo process')
 
         ...

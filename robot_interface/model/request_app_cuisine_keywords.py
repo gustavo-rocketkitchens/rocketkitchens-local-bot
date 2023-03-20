@@ -134,7 +134,7 @@ class KeywordsMenuItem(GetMenuItem):
                          {"Street food": ["tacos", "gyro", "hot dog", "pretzel", "crepes", "empanadas", "kebab", "arepa"]},
                          {"Sudanese": ["ful medames", "kisra", "shakshuka", "mahshi", "mulukhiyah", "asida", "basbousa", "karkadeh"]},
                          {"Sushi": ["nigiri", "maki", "sashimi", "tempura", "wasabi", "soy sauce", "pickled ginger", "ramen"]},
-                         {"Swedish": ["meatballs", "gravlax", "knäckebröd", "cinnamon buns", "smörgåsbord", "prinsesstårta", "janssons frestelse", "surströmming"]},
+                         {"Swedish": ["meatballs", "gravlax", "knäckebröd", "cinnamon buns", "smörgåsbord", "prinsesstårta", "janssons frestelse", "surströmming", "rolls"]},
                          {"Syrian": ["hummus", "shawarma", "tabbouleh", "baba ghanoush", "manakeesh", "kibbeh", "ful medames", "za'atar"]},
                          {"Tacos": ["carne asada", "carnitas", "al pastor", "fish", "shrimp", "barbacoa", "pollo", "tortilla"]},
                          {"Tea": ["chai", "oolong", "green tea", "black tea", "matcha", "herbal tea", "bubble tea", "iced tea"]},
