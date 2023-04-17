@@ -157,19 +157,18 @@ class Start:
 
     def leo_process(self):
 
-        # self.leo_reports_menu_item()
+        self.leo_reports_menu_item()
         logging.info('successfully leo reports menu item')
-
         self.leo_file_handler()
         logging.info('successfully leo file handler')
-        # self.leo_post()
+        self.leo_post()
         logging.info('successfully leo post')
         time.sleep(1)
-        self.leo_post_sql()
-        logging.info('successfully leo post in postgres')
+        # self.leo_post_sql()
+        # logging.info('successfully leo post in postgres')
         logging.info('successfully finished leo process')
 
-        ...
+
 
 # if __name__ == '__main__':
 #     start = Start()

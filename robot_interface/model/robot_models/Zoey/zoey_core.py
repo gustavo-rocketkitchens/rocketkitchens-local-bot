@@ -702,16 +702,33 @@ class TaskAutomator(Accesses):
         logger.info("orders clicked ")
 
         # Last Week
-        r.click("//body//div//div[@data-testid='content-container-new']//div//div//div//div//div[2]//div[1]//button[1]")
-        r.wait(2)
-        r.click("//div[normalize-space()='Last week']")
+        # r.click("//body//div//div[@data-testid='content-container-new']//div//div//div//div//div[2]//div[1]//button[1]")
+        # r.wait(2)
+        # r.click("//div[normalize-space()='Last week']")
+
+
+        r.click("//button[@class='MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-disableElevation css-gmalig']")
+        r.wait(1)
+        r.click("//div[normalize-space()='Last 7 days']")
+        r.wait(1)
+        r.click("//button[normalize-space()='Submit']")
+
+        # Popup
+        # r.click("//button[normalize-space()='Later']")
+
 
         r.wait(2)
+        r.click("//button[normalize-space()='Download report']")
+        r.wait(1)
+        r.click("//span[normalize-space()='.xls file']")
+        r.wait(1)
+        r.click("(//button[@type='button'][normalize-space()='Download report'])[2]")
+
         # Select .xlsx format to download
-        r.click("//input[@value='XLSX']")  # xlsx
-        r.wait(2)
+        # r.click("//input[@value='XLSX']")  # xlsx
+        # r.wait(2)
         # Download Report
-        r.click("//span[normalize-space()='Download Report']")
+        # r.click("//span[normalize-space()='Download Report']")
 
         r.wait(2)
 
